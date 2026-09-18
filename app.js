@@ -1,18 +1,22 @@
 
 /*
-    DESK DASHBOARD
+    DESK DASHBOARD V2
 
-    Funciones:
-    - Reloj
-    - Fecha
-    - Clima mediante Open-Meteo
-    - Lista To-Do
-    - Guardado local mediante localStorage
+    Compatible con JavaScript antiguo.
+
+    No utiliza:
+    - frameworks
+    - módulos
+    - async/await
+    - fetch
+    - APIs modernas innecesarias
 */
 
 
 /*
+    ============================
     CONFIGURACIÓN
+    ============================
 */
 
 var CONFIG = {
@@ -29,37 +33,40 @@ var CONFIG = {
 
 
 /*
-    ELEMENTOS HTML
+    ============================
+    ELEMENTOS
+    ============================
 */
 
-var clockElement = document.getElementById("clock");
-var secondsElement = document.getElementById("seconds");
-var dateElement = document.getElementById("date");
+var clockElement =
+    document.getElementById("clock");
+
+var secondsElement =
+    document.getElementById("seconds");
+
+var dateElement =
+    document.getElementById("date");
 
 
 /*
+    ============================
     RELOJ
+    ============================
 */
 
 function updateClock() {
 
     var now = new Date();
 
+    var hours =
+        now.getHours();
 
-    /*
-        Hora
-    */
+    var minutes =
+        now.getMinutes();
 
-    var hours = now.getHours();
+    var seconds =
+        now.getSeconds();
 
-    var minutes = now.getMinutes();
-
-    var seconds = now.getSeconds();
-
-
-    /*
-        Añadir cero delante
-    */
 
     if (hours < 10) {
         hours = "0" + hours;
@@ -87,6 +94,7 @@ function updateClock() {
     */
 
     var days = [
+
         "domingo",
         "lunes",
         "martes",
@@ -94,10 +102,12 @@ function updateClock() {
         "jueves",
         "viernes",
         "sábado"
+
     ];
 
 
     var months = [
+
         "enero",
         "febrero",
         "marzo",
@@ -110,40 +120,34 @@ function updateClock() {
         "octubre",
         "noviembre",
         "diciembre"
+
     ];
 
 
-    var dateText =
+    dateElement.textContent =
+
         days[now.getDay()] +
         ", " +
         now.getDate() +
         " de " +
         months[now.getMonth()];
 
-
-    dateElement.textContent = dateText;
-
 }
 
 
-/*
-    Actualizar inmediatamente
-*/
-
 updateClock();
 
-
-/*
-    Actualizar cada segundo
-*/
-
-setInterval(updateClock, 1000);
+setInterval(
+    updateClock,
+    1000
+);
 
 
 
 /*
-    CÓDIGOS METEOROLÓGICOS
-    Open-Meteo
+    ============================
+    CLIMA
+    ============================
 */
 
 var weatherCodes = {
@@ -193,60 +197,90 @@ var weatherCodes = {
 };
 
 
-
 /*
-    OBTENER CLIMA
+    Obtener clima mediante XHR.
+
+    XMLHttpRequest se utiliza en lugar de fetch
+    para mejorar compatibilidad con navegadores
+    antiguos.
 */
 
 function loadWeather() {
 
     var url =
+
         "https://api.open-meteo.com/v1/forecast" +
-        "?latitude=" + CONFIG.latitude +
-        "&longitude=" + CONFIG.longitude +
-        "&current=temperature_2m,apparent_temperature,weather_code" +
-        "&timezone=" + CONFIG.timezone +
+
+        "?latitude=" +
+        CONFIG.latitude +
+
+        "&longitude=" +
+        CONFIG.longitude +
+
+        "&current=" +
+        "temperature_2m," +
+        "apparent_temperature," +
+        "weather_code" +
+
+        "&timezone=" +
+        CONFIG.timezone +
+
         "&temperature_unit=celsius";
 
 
-    var request = new XMLHttpRequest();
+    var request =
+        new XMLHttpRequest();
 
 
-    request.open("GET", url, true);
+    request.open(
+        "GET",
+        url,
+        true
+    );
 
 
-    request.onreadystatechange = function () {
+    request.onreadystatechange =
+        function () {
 
-        if (request.readyState !== 4) {
-            return;
-        }
+            if (
+                request.readyState !== 4
+            ) {
 
+                return;
 
-        if (request.status !== 200) {
-
-            showWeatherError();
-
-            return;
-        }
+            }
 
 
-        try {
+            if (
+                request.status !== 200
+            ) {
 
-            var data =
-                JSON.parse(request.responseText);
+                showWeatherError();
+
+                return;
+
+            }
 
 
-            displayWeather(data);
+            try {
 
-        }
+                var data =
+                    JSON.parse(
+                        request.responseText
+                    );
 
-        catch (error) {
 
-            showWeatherError();
+                displayWeather(data);
 
-        }
+            }
 
-    };
+            catch (error) {
+
+                showWeatherError();
+
+            }
+
+        };
 
 
     request.send();
@@ -254,74 +288,85 @@ function loadWeather() {
 }
 
 
-
 /*
-    MOSTRAR CLIMA
+    Mostrar clima
 */
 
 function displayWeather(data) {
 
-    var current = data.current;
-
-
-    var code =
-        current.weather_code;
+    var current =
+        data.current;
 
 
     var info =
-        weatherCodes[code];
+        weatherCodes[
+            current.weather_code
+        ];
 
 
     if (!info) {
 
-        info = ["☁", "Condición desconocida"];
+        info = [
+            "·",
+            "Condición desconocida"
+        ];
 
     }
 
 
     document.getElementById(
         "weather-icon"
-    ).textContent = info[0];
+    ).textContent =
+        info[0];
 
 
     document.getElementById(
         "temperature"
     ).textContent =
-        Math.round(current.temperature_2m) + "°";
+
+        Math.round(
+            current.temperature_2m
+        ) + "°";
 
 
     document.getElementById(
         "condition"
-    ).textContent = info[1];
+    ).textContent =
+        info[1];
 
 
     document.getElementById(
         "feels-like"
     ).textContent =
+
         "Sensación " +
-        Math.round(current.apparent_temperature) +
+
+        Math.round(
+            current.apparent_temperature
+        ) +
+
         "°";
 
 
     document.getElementById(
         "weather-updated"
     ).textContent =
+
         "Clima actualizado " +
         getCurrentTime();
 
 }
 
 
-
 /*
-    ERROR DE CLIMA
+    Error de clima
 */
 
 function showWeatherError() {
 
     document.getElementById(
         "weather-icon"
-    ).textContent = "—";
+    ).textContent = "·";
 
 
     document.getElementById(
@@ -332,37 +377,48 @@ function showWeatherError() {
     document.getElementById(
         "condition"
     ).textContent =
-        "No se pudo actualizar el clima";
+        "Clima no disponible";
 
 
     document.getElementById(
         "weather-updated"
     ).textContent =
-        "Sin conexión al servicio meteorológico";
+        "Sin conexión";
 
 }
 
 
-
 /*
-    HORA PARA EL FOOTER
+    Obtener hora
 */
 
 function getCurrentTime() {
 
-    var now = new Date();
+    var now =
+        new Date();
 
-    var hours = now.getHours();
 
-    var minutes = now.getMinutes();
+    var hours =
+        now.getHours();
+
+
+    var minutes =
+        now.getMinutes();
 
 
     if (hours < 10) {
-        hours = "0" + hours;
+
+        hours =
+            "0" + hours;
+
     }
 
+
     if (minutes < 10) {
-        minutes = "0" + minutes;
+
+        minutes =
+            "0" + minutes;
+
     }
 
 
@@ -371,26 +427,21 @@ function getCurrentTime() {
 }
 
 
-/*
-    Cargar clima
-*/
-
 loadWeather();
 
 
 /*
-    Actualizar clima cada 30 minutos
+    Actualizar cada 30 minutos.
 */
 
 setInterval(
+
     loadWeather,
+
     30 * 60 * 1000
+
 );
 
-
-/*
-    Botón actualizar
-*/
 
 document.getElementById(
     "refresh-weather"
@@ -407,16 +458,15 @@ document.getElementById(
     ============================
 */
 
-
 var TODO_KEY =
-    "desk-dashboard-todos";
+    "desk-dashboard-todos-v2";
 
 
 var todos = [];
 
 
 /*
-    Cargar tareas guardadas
+    Cargar tareas
 */
 
 function loadTodos() {
@@ -424,7 +474,9 @@ function loadTodos() {
     try {
 
         var saved =
-            localStorage.getItem(TODO_KEY);
+            localStorage.getItem(
+                TODO_KEY
+            );
 
 
         if (saved) {
@@ -449,7 +501,7 @@ function loadTodos() {
 
 
 /*
-    Guardar tareas
+    Guardar
 */
 
 function saveTodos() {
@@ -457,8 +509,11 @@ function saveTodos() {
     try {
 
         localStorage.setItem(
+
             TODO_KEY,
+
             JSON.stringify(todos)
+
         );
 
     }
@@ -466,8 +521,7 @@ function saveTodos() {
     catch (error) {
 
         /*
-            Si localStorage no está disponible,
-            simplemente continuamos sin guardar.
+            localStorage no disponible.
         */
 
     }
@@ -476,17 +530,21 @@ function saveTodos() {
 
 
 /*
-    Dibujar tareas
+    Dibujar lista
 */
 
 function renderTodos() {
 
     var list =
-        document.getElementById("todo-list");
+        document.getElementById(
+            "todo-list"
+        );
 
 
     var empty =
-        document.getElementById("todo-empty");
+        document.getElementById(
+            "todo-empty"
+        );
 
 
     list.innerHTML = "";
@@ -494,14 +552,16 @@ function renderTodos() {
 
     if (todos.length === 0) {
 
-        empty.style.display = "block";
+        empty.style.display =
+            "block";
 
         return;
 
     }
 
 
-    empty.style.display = "none";
+    empty.style.display =
+        "none";
 
 
     for (
@@ -522,7 +582,7 @@ function renderTodos() {
 
 
 /*
-    Crear elemento To-Do
+    Crear tarea
 */
 
 function createTodoElement(
@@ -532,7 +592,9 @@ function createTodoElement(
 ) {
 
     var item =
-        document.createElement("li");
+        document.createElement(
+            "li"
+        );
 
 
     item.className =
@@ -541,20 +603,27 @@ function createTodoElement(
 
     if (todo.done) {
 
-        item.className += " done";
+        item.className +=
+            " done";
 
     }
 
 
     var label =
-        document.createElement("label");
+        document.createElement(
+            "label"
+        );
 
 
     var checkbox =
-        document.createElement("input");
+        document.createElement(
+            "input"
+        );
 
 
-    checkbox.type = "checkbox";
+    checkbox.type =
+        "checkbox";
+
 
     checkbox.checked =
         todo.done;
@@ -577,39 +646,52 @@ function createTodoElement(
 
 
     var text =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
 
     text.textContent =
         todo.text;
 
 
-    label.appendChild(checkbox);
+    label.appendChild(
+        checkbox
+    );
 
-    label.appendChild(text);
+
+    label.appendChild(
+        text
+    );
 
 
     var deleteButton =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
 
     deleteButton.className =
         "delete";
 
 
-    deleteButton.textContent =
-        "×";
-
-
     deleteButton.type =
         "button";
+
+
+    deleteButton.textContent =
+        "×";
 
 
     deleteButton.addEventListener(
         "click",
         function () {
 
-            todos.splice(index, 1);
+            todos.splice(
+                index,
+                1
+            );
+
 
             saveTodos();
 
@@ -619,19 +701,25 @@ function createTodoElement(
     );
 
 
-    item.appendChild(label);
+    item.appendChild(
+        label
+    );
 
-    item.appendChild(deleteButton);
+
+    item.appendChild(
+        deleteButton
+    );
 
 
-    list.appendChild(item);
+    list.appendChild(
+        item
+    );
 
 }
 
 
-
 /*
-    AGREGAR TAREA
+    Agregar tarea
 */
 
 document.getElementById(
@@ -680,9 +768,179 @@ document.getElementById(
 );
 
 
+loadTodos();
+
+
+
 /*
-    Inicializar To-Do
+    ============================
+    SCREEN SAVER
+    ============================
+
+    Después de 30 minutos sin tocar
+    la pantalla mostramos una versión
+    extremadamente tenue del reloj.
+
+    Esto NO reemplaza apagar la pantalla.
+    Android debería seguir siendo el
+    encargado de apagarla cuando sea
+    posible.
 */
 
-loadTodos();
+
+var lastInteraction =
+    new Date().getTime();
+
+
+var SCREEN_SAVER_DELAY =
+    30 * 60 * 1000;
+
+
+var screensaver =
+    document.getElementById(
+        "screensaver"
+    );
+
+
+var screensaverClock =
+    document.getElementById(
+        "screensaver-clock"
+    );
+
+
+function registerInteraction() {
+
+    lastInteraction =
+        new Date().getTime();
+
+
+    screensaver.className =
+        "screensaver";
+
+}
+
+
+/*
+    Detectar interacción
+*/
+
+document.addEventListener(
+    "touchstart",
+    registerInteraction,
+    false
+);
+
+
+document.addEventListener(
+    "click",
+    registerInteraction,
+    false
+);
+
+
+document.addEventListener(
+    "mousemove",
+    registerInteraction,
+    false
+);
+
+
+/*
+    Comprobar cada minuto
+*/
+
+setInterval(
+    function () {
+
+        var now =
+            new Date().getTime();
+
+
+        if (
+            now -
+            lastInteraction
+            >
+            SCREEN_SAVER_DELAY
+        ) {
+
+            screensaver.className =
+                "screensaver active";
+
+        }
+
+    },
+    60 * 1000
+);
+
+
+/*
+    Reloj del screen saver
+*/
+
+function updateScreensaver() {
+
+    var now =
+        new Date();
+
+
+    var hours =
+        now.getHours();
+
+
+    var minutes =
+        now.getMinutes();
+
+
+    if (hours < 10) {
+
+        hours =
+            "0" + hours;
+
+    }
+
+
+    if (minutes < 10) {
+
+        minutes =
+            "0" + minutes;
+
+    }
+
+
+    screensaverClock.textContent =
+        hours + ":" + minutes;
+
+
+    /*
+        Movimiento extremadamente lento.
+
+        Evita mantener exactamente los
+        mismos píxeles durante horas.
+    */
+
+    var seconds =
+        now.getSeconds();
+
+
+    var offset =
+        Math.sin(
+            seconds / 10
+        ) * 4;
+
+
+    screensaverClock.style.transform =
+        "translateX(" +
+        offset +
+        "px)";
+
+}
+
+
+updateScreensaver();
+
+
+setInterval(
+    updateScreensaver,
+    1000
+);
 

@@ -1,8 +1,19 @@
 
 /*
-    DESK DASHBOARD
-    Diseño deliberadamente sencillo para Android 7
+    DESK DASHBOARD V2
+
+    Diseño pensado para permanecer
+    encendido durante períodos largos.
+
+    Principios:
+
+    - Fondo casi negro.
+    - Poco blanco puro.
+    - Colores poco saturados.
+    - Elementos secundarios muy tenues.
+    - Nada de grandes superficies claras.
 */
+
 
 * {
     box-sizing: border-box;
@@ -11,42 +22,51 @@
 
 html,
 body {
+
     margin: 0;
     padding: 0;
 
     width: 100%;
     min-height: 100%;
 
-    background: #0b0e0f;
-    color: #e5eeee;
+    background: #050707;
+
+    color: #cbd3d3;
 
     font-family:
         Arial,
         Helvetica,
         sans-serif;
+
 }
 
 
 /*
-    CONTENEDOR PRINCIPAL
+    DASHBOARD
 */
 
 .dashboard {
+
     width: 100%;
-    max-width: 850px;
+
+    max-width: 900px;
 
     min-height: 100vh;
 
     margin: 0 auto;
 
-    padding: 45px 40px;
+    padding:
+        45px
+        40px;
 
     display: flex;
+
     flex-direction: column;
 
     justify-content: center;
 
     gap: 35px;
+
 }
 
 
@@ -55,23 +75,40 @@ body {
 */
 
 .clock-section {
+
     text-align: center;
+
 }
 
 
-.date {
-    color: #7d8b8d;
+/*
+    Fecha secundaria
+*/
 
-    font-size: 18px;
+.date {
+
+    color: #596667;
+
+    font-size: 17px;
 
     letter-spacing: 1px;
 
     text-transform: capitalize;
+
 }
 
 
+/*
+    Hora principal
+
+    Evitamos blanco puro.
+*/
+
 .clock {
+
     margin-top: 12px;
+
+    color: #cbd3d3;
 
     font-size: 150px;
 
@@ -80,15 +117,25 @@ body {
     font-weight: 300;
 
     letter-spacing: -6px;
+
 }
 
 
+/*
+    Segundos
+
+    Muy tenues porque no son
+    información importante.
+*/
+
 .seconds {
+
     margin-top: 15px;
 
-    color: #4f6062;
+    color: #343f40;
 
-    font-size: 14px;
+    font-size: 13px;
+
 }
 
 
@@ -97,57 +144,78 @@ body {
 */
 
 .weather {
-    border-top: 1px solid #182123;
-    border-bottom: 1px solid #182123;
 
-    padding: 25px 0;
+    border-top:
+        1px solid #11191a;
+
+    border-bottom:
+        1px solid #11191a;
+
+    padding:
+        25px 0;
+
 }
 
 
 .weather-main {
+
     display: flex;
 
     align-items: center;
 
     gap: 20px;
+
 }
 
 
 .weather-icon {
+
     width: 70px;
 
     text-align: center;
 
-    font-size: 55px;
+    font-size: 48px;
+
+    filter:
+        saturate(0.45);
+
 }
 
 
 .temperature {
+
+    color: #aebbbb;
+
     font-size: 58px;
 
     font-weight: 300;
+
 }
 
 
 .condition {
+
     margin-top: 4px;
 
-    color: #7d8b8d;
+    color: #596667;
 
     font-size: 16px;
+
 }
 
 
 .weather-info {
+
     display: flex;
 
     justify-content: space-between;
 
     margin-top: 18px;
 
-    color: #687779;
+    color: #465354;
 
-    font-size: 13px;
+    font-size: 12px;
+
 }
 
 
@@ -156,98 +224,135 @@ body {
 */
 
 .todo {
+
     width: 100%;
 
     max-width: 650px;
 
     margin: 0 auto;
+
 }
 
 
 .section-title {
+
     margin-bottom: 12px;
 
-    font-size: 19px;
+    color: #849091;
+
+    font-size: 18px;
+
 }
 
 
 .todo-form {
+
     display: flex;
 
     gap: 8px;
+
 }
 
 
 .todo-form input {
+
     flex: 1;
 
     min-width: 0;
 
-    padding: 13px 14px;
+    padding:
+        12px
+        14px;
 
-    border: 1px solid #182426;
+    border:
+        1px solid #121a1b;
 
-    border-radius: 9px;
+    border-radius: 8px;
 
     outline: none;
 
-    background: #101617;
+    background: #090c0d;
 
-    color: #e5eeee;
+    color: #bac4c4;
 
     font-size: 15px;
+
+}
+
+
+.todo-form input::placeholder {
+
+    color: #3d4849;
+
 }
 
 
 .todo-form input:focus {
-    border-color: #315154;
+
+    border-color:
+        #253536;
+
 }
 
 
 .todo-form button {
-    width: 48px;
 
-    border: 1px solid #182426;
+    width: 46px;
 
-    border-radius: 9px;
+    border:
+        1px solid #121a1b;
 
-    background: #11191a;
+    border-radius: 8px;
 
-    color: #91b8bb;
+    background: #090c0d;
 
-    font-size: 25px;
+    color: #728889;
+
+    font-size: 23px;
 
     cursor: pointer;
+
 }
 
 
 /*
-    LISTA
+    TAREAS
 */
 
 #todo-list {
+
     list-style: none;
 
     padding: 0;
 
-    margin: 14px 0 0;
+    margin:
+        14px
+        0
+        0;
+
 }
 
 
 .todo-item {
+
     display: flex;
 
     align-items: center;
 
     gap: 10px;
 
-    padding: 11px 2px;
+    padding:
+        10px
+        2px;
 
-    border-bottom: 1px solid #141d1e;
+    border-bottom:
+        1px solid #0e1516;
+
 }
 
 
 .todo-item label {
+
     display: flex;
 
     align-items: center;
@@ -255,43 +360,62 @@ body {
     gap: 12px;
 
     flex: 1;
+
 }
 
 
 .todo-item input {
-    width: 18px;
-    height: 18px;
 
-    accent-color: #719a9d;
+    width: 17px;
+
+    height: 17px;
+
+    accent-color:
+        #607779;
+
+}
+
+
+.todo-item span {
+
+    color: #929e9f;
+
 }
 
 
 .todo-item.done span {
-    color: #536163;
 
-    text-decoration: line-through;
+    color: #3d4849;
+
+    text-decoration:
+        line-through;
+
 }
 
 
 .delete {
+
     border: 0;
 
     background: transparent;
 
-    color: #59686a;
+    color: #3c4748;
 
-    font-size: 18px;
+    font-size: 17px;
 
     cursor: pointer;
+
 }
 
 
 .todo-empty {
+
     padding-top: 13px;
 
-    color: #536163;
+    color: #3d4849;
 
-    font-size: 14px;
+    font-size: 13px;
+
 }
 
 
@@ -300,65 +424,137 @@ body {
 */
 
 footer {
+
     display: flex;
 
     justify-content: space-between;
 
     align-items: center;
 
-    color: #536163;
+    color: #394546;
 
-    font-size: 11px;
+    font-size: 10px;
+
 }
 
 
 footer button {
+
     border: 0;
 
     background: transparent;
 
-    color: #708688;
+    color: #465758;
 
     cursor: pointer;
 
     padding: 8px;
+
 }
 
 
 /*
-    TABLETS PEQUEÑAS
+    ============================
+    SCREEN SAVER
+    ============================
+
+    Aparece después de mucho tiempo
+    sin interacción.
+
+    No deja una imagen totalmente
+    estática en pantalla.
+*/
+
+.screensaver {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #020404;
+
+    z-index: 100;
+
+}
+
+
+.screensaver.active {
+
+    display: flex;
+
+}
+
+
+#screensaver-clock {
+
+    color: #111818;
+
+    font-size: 10vw;
+
+    font-weight: 300;
+
+    transition:
+        transform 20s linear;
+
+}
+
+
+/*
+    TABLETS
 */
 
 @media (max-width: 600px) {
 
     .dashboard {
-        padding: 30px 22px;
+
+        padding:
+            30px
+            22px;
 
         gap: 28px;
+
     }
 
 
     .clock {
+
         font-size: 23vw;
 
         letter-spacing: -3px;
+
     }
 
 
     .date {
+
         font-size: 15px;
+
     }
 
 
     .temperature {
+
         font-size: 48px;
+
     }
 
 
     .weather-info {
+
         flex-direction: column;
 
         gap: 6px;
+
     }
 
 }
