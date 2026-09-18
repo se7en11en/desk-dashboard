@@ -1,561 +1,543 @@
-
 /*
-    DESK DASHBOARD V2
-
-    Diseño pensado para permanecer
-    encendido durante períodos largos.
-
-    Principios:
-
-    - Fondo casi negro.
-    - Poco blanco puro.
-    - Colores poco saturados.
-    - Elementos secundarios muy tenues.
-    - Nada de grandes superficies claras.
+    DESK DASHBOARD & CALENDAR
+    Optimizado para Android Kiosk (Fully Kiosk Browser) y pantallas AMOLED.
 */
-
 
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
-
 
 html,
 body {
-
     margin: 0;
     padding: 0;
-
     width: 100%;
     min-height: 100%;
-
-    background: #050707;
-
+    background-color: #050707;
     color: #cbd3d3;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
 }
 
+/*
+    BOTÓN FLOTANTE PARA CAMBIO DE VISTA
+*/
+.view-toggle-bar {
+    position: fixed;
+    top: 14px;
+    right: 16px;
+    z-index: 50;
+}
+
+.btn-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #0b1112;
+    border: 1px solid #192325;
+    border-radius: 20px;
+    color: #8c9ea0;
+    font-size: 14px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.btn-toggle:active {
+    background-color: #152224;
+    color: #cbd3d3;
+}
 
 /*
-    DASHBOARD
+    VISTAS
 */
-
-.dashboard {
-
+.dashboard-view,
+.calendar-view {
+    display: none;
     width: 100%;
-
-    max-width: 900px;
-
     min-height: 100vh;
-
-    margin: 0 auto;
-
-    padding:
-        45px
-        40px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    gap: 35px;
-
 }
 
+.dashboard-view.active,
+.calendar-view.active {
+    display: block;
+}
 
 /*
-    RELOJ
+    DASHBOARD PRINCIPAL
 */
+.dashboard-content {
+    width: 100%;
+    max-width: 900px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 45px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 32px;
+}
 
 .clock-section {
-
     text-align: center;
-
 }
-
-
-/*
-    Fecha secundaria
-*/
 
 .date {
-
     color: #596667;
-
-    font-size: 17px;
-
+    font-size: 18px;
     letter-spacing: 1px;
-
     text-transform: capitalize;
-
 }
-
-
-/*
-    Hora principal
-
-    Evitamos blanco puro.
-*/
 
 .clock {
-
     margin-top: 12px;
-
     color: #cbd3d3;
-
-    font-size: 150px;
-
-    line-height: 0.9;
-
+    font-size: 140px;
+    line-height: 0.95;
     font-weight: 300;
-
     letter-spacing: -6px;
-
 }
-
-
-/*
-    Segundos
-
-    Muy tenues porque no son
-    información importante.
-*/
 
 .seconds {
-
     margin-top: 15px;
-
     color: #343f40;
-
-    font-size: 13px;
-
+    font-size: 14px;
 }
-
-
-/*
-    CLIMA
-*/
 
 .weather {
-
-    border-top:
-        1px solid #11191a;
-
-    border-bottom:
-        1px solid #11191a;
-
-    padding:
-        25px 0;
-
+    border-top: 1px solid #11191a;
+    border-bottom: 1px solid #11191a;
+    padding: 22px 0;
 }
-
 
 .weather-main {
-
     display: flex;
-
     align-items: center;
-
     gap: 20px;
-
 }
-
 
 .weather-icon {
-
     width: 70px;
-
     text-align: center;
-
     font-size: 48px;
-
-    filter:
-        saturate(0.45);
-
+    filter: saturate(0.45);
 }
-
 
 .temperature {
-
     color: #aebbbb;
-
-    font-size: 58px;
-
+    font-size: 56px;
     font-weight: 300;
-
 }
-
 
 .condition {
-
     margin-top: 4px;
-
     color: #596667;
-
     font-size: 16px;
-
 }
-
 
 .weather-info {
-
     display: flex;
-
     justify-content: space-between;
-
-    margin-top: 18px;
-
+    margin-top: 16px;
     color: #465354;
-
-    font-size: 12px;
-
+    font-size: 13px;
 }
-
-
-/*
-    TODO
-*/
 
 .todo {
-
     width: 100%;
-
     max-width: 650px;
-
     margin: 0 auto;
-
 }
-
 
 .section-title {
-
     margin-bottom: 12px;
-
     color: #849091;
-
     font-size: 18px;
-
 }
 
-
-.todo-form {
-
+.todo-form,
+.day-task-form {
     display: flex;
-
     gap: 8px;
-
 }
 
-
-.todo-form input {
-
+.todo-form input,
+.day-task-form input {
     flex: 1;
-
     min-width: 0;
-
-    padding:
-        12px
-        14px;
-
-    border:
-        1px solid #121a1b;
-
+    padding: 12px 14px;
+    border: 1px solid #121a1b;
     border-radius: 8px;
-
     outline: none;
-
     background: #090c0d;
-
     color: #bac4c4;
-
     font-size: 15px;
-
 }
 
-
-.todo-form input::placeholder {
-
-    color: #3d4849;
-
+.todo-form input:focus,
+.day-task-form input:focus {
+    border-color: #253536;
 }
 
-
-.todo-form input:focus {
-
-    border-color:
-        #253536;
-
-}
-
-
-.todo-form button {
-
-    width: 46px;
-
-    border:
-        1px solid #121a1b;
-
+.todo-form button,
+.day-task-form button {
+    width: 48px;
+    min-height: 44px;
+    border: 1px solid #121a1b;
     border-radius: 8px;
-
     background: #090c0d;
-
     color: #728889;
-
-    font-size: 23px;
-
+    font-size: 24px;
     cursor: pointer;
-
 }
 
-
-/*
-    TAREAS
-*/
-
-#todo-list {
-
+#todo-list,
+.day-task-list {
     list-style: none;
-
     padding: 0;
-
-    margin:
-        14px
-        0
-        0;
-
+    margin: 14px 0 0;
 }
-
 
 .todo-item {
-
     display: flex;
-
     align-items: center;
-
     gap: 10px;
-
-    padding:
-        10px
-        2px;
-
-    border-bottom:
-        1px solid #0e1516;
-
+    padding: 10px 2px;
+    border-bottom: 1px solid #0e1516;
 }
-
 
 .todo-item label {
-
     display: flex;
-
     align-items: center;
-
     gap: 12px;
-
     flex: 1;
-
+    cursor: pointer;
 }
-
 
 .todo-item input {
-
-    width: 17px;
-
-    height: 17px;
-
-    accent-color:
-        #607779;
-
+    width: 18px;
+    height: 18px;
+    accent-color: #607779;
 }
-
 
 .todo-item span {
-
     color: #929e9f;
-
+    font-size: 15px;
 }
-
 
 .todo-item.done span {
-
     color: #3d4849;
-
-    text-decoration:
-        line-through;
-
+    text-decoration: line-through;
 }
-
 
 .delete {
-
     border: 0;
-
     background: transparent;
-
     color: #3c4748;
-
-    font-size: 17px;
-
+    font-size: 20px;
+    padding: 4px 8px;
     cursor: pointer;
-
 }
 
-
-.todo-empty {
-
-    padding-top: 13px;
-
+.todo-empty,
+.day-task-empty {
+    padding-top: 14px;
     color: #3d4849;
-
-    font-size: 13px;
-
+    font-size: 14px;
 }
-
-
-/*
-    FOOTER
-*/
 
 footer {
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     color: #394546;
-
-    font-size: 10px;
-
+    font-size: 12px;
 }
-
 
 footer button {
-
     border: 0;
-
     background: transparent;
-
     color: #465758;
-
     cursor: pointer;
-
     padding: 8px;
-
 }
 
-
 /*
-    ============================
-    SCREEN SAVER
-    ============================
-
-    Aparece después de mucho tiempo
-    sin interacción.
-
-    No deja una imagen totalmente
-    estática en pantalla.
+    ======================================
+    CALENDARIO (OPTIMIZADO PARA TABLET)
+    ======================================
 */
+.calendar-container {
+    width: 100%;
+    max-width: 1140px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 30px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
-.screensaver {
+.cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #11191a;
+    padding-right: 170px; /* Evita solaparse con el botón toggle */
+}
 
-    position: fixed;
+.cal-mini-clock {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
 
-    top: 0;
-    left: 0;
+#cal-clock-time {
+    font-size: 34px;
+    font-weight: 300;
+    color: #aebbbb;
+    letter-spacing: -1px;
+}
 
+.cal-mini-date {
+    font-size: 15px;
+    color: #596667;
+    text-transform: capitalize;
+}
+
+.cal-month-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.month-label {
+    font-size: 20px;
+    font-weight: 400;
+    color: #cbd3d3;
+    min-width: 180px;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.nav-btn {
+    background: #090c0d;
+    border: 1px solid #141f20;
+    color: #728889;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    min-height: 38px;
+}
+
+.nav-btn:active {
+    background: #141f20;
+    color: #cbd3d3;
+}
+
+.cal-body-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 26px;
+    flex: 1;
+}
+
+/* Cuadrícula */
+.cal-grid-wrapper {
+    flex: 1 1 58%;
+    background-color: #070a0b;
+    border: 1px solid #11191a;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.cal-weekdays {
+    display: flex;
+    width: 100%;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #11191a;
+    padding-bottom: 8px;
+}
+
+.cal-weekdays div {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    color: #4a5758;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cal-grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* Cada casilla del día (evita aspect-ratio para compatibilidad) */
+.cal-day-cell {
+    width: 14.2857%;
+    min-height: 64px;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.cal-day-btn {
     width: 100%;
     height: 100%;
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: #020404;
-
-    z-index: 100;
-
-}
-
-
-.screensaver.active {
-
+    min-height: 58px;
+    background: #080c0d;
+    border: 1px solid #0e1516;
+    border-radius: 8px;
+    color: #8c9ea0;
     display: flex;
-
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    padding: 4px;
 }
 
-
-#screensaver-clock {
-
-    color: #111818;
-
-    font-size: 10vw;
-
-    font-weight: 300;
-
-    transition:
-        transform 20s linear;
-
+.cal-day-btn:active {
+    background: #121c1e;
 }
 
+.cal-day-cell.other-month .cal-day-btn {
+    opacity: 0.22;
+    background: transparent;
+    border-color: transparent;
+}
+
+/* Resalte de la semana en curso */
+.cal-day-cell.current-week .cal-day-btn {
+    background-color: #0c1415;
+    border-color: #1a2729;
+}
+
+/* Día de hoy */
+.cal-day-cell.today .cal-day-btn {
+    border-color: #2e494b;
+    color: #e2ecec;
+    font-weight: bold;
+}
+
+.cal-day-cell.today .cal-day-btn::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 6px;
+    height: 6px;
+    background-color: #4f8084;
+    border-radius: 50%;
+}
+
+/* Día seleccionado */
+.cal-day-cell.selected .cal-day-btn {
+    background-color: #132426;
+    border-color: #3c6569;
+    color: #eaf1f1;
+}
+
+.day-number {
+    font-size: 19px;
+    line-height: 1;
+}
+
+.day-task-badge {
+    position: absolute;
+    bottom: 5px;
+    width: 6px;
+    height: 6px;
+    background-color: #6da2a6;
+    border-radius: 50%;
+}
+
+/* Panel de notas por día */
+.cal-day-panel {
+    flex: 1 1 42%;
+    background-color: #070a0b;
+    border: 1px solid #11191a;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.day-panel-header {
+    border-bottom: 1px solid #11191a;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.day-title {
+    font-size: 18px;
+    color: #aebbbb;
+    text-transform: capitalize;
+}
+
+.day-subtitle {
+    font-size: 13px;
+    color: #4f5d5e;
+    margin-top: 4px;
+}
 
 /*
-    TABLETS
+    ======================================
+    SCREEN SAVER (GLOBAL)
+    ======================================
 */
-
-@media (max-width: 600px) {
-
-    .dashboard {
-
-        padding:
-            30px
-            22px;
-
-        gap: 28px;
-
-    }
-
-
-    .clock {
-
-        font-size: 23vw;
-
-        letter-spacing: -3px;
-
-    }
-
-
-    .date {
-
-        font-size: 15px;
-
-    }
-
-
-    .temperature {
-
-        font-size: 48px;
-
-    }
-
-
-    .weather-info {
-
-        flex-direction: column;
-
-        gap: 6px;
-
-    }
-
+.screensaver {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: #020404;
+    z-index: 100;
 }
 
+.screensaver.active {
+    display: flex;
+}
+
+#screensaver-clock {
+    color: #111818;
+    font-size: 10vw;
+    font-weight: 300;
+    transition: transform 20s linear;
+}
+
+/*
+    RESPONSIVE TABLET VERTICAL / PANTALLA PEQUEÑA
+*/
+@media (max-width: 820px) {
+    .cal-body-layout {
+        flex-direction: column;
+    }
+
+    .cal-header {
+        padding-right: 0;
+        margin-top: 36px;
+    }
+
+    .clock {
+        font-size: 22vw;
+        letter-spacing: -3px;
+    }
+
+    .cal-day-cell {
+        min-height: 54px;
+    }
+}
