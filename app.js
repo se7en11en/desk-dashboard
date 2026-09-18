@@ -504,14 +504,14 @@ toggleBtn.addEventListener("click", function () {
         viewDashboard.className = "dashboard-view";
         viewCalendar.className = "calendar-view active";
         toggleText.textContent = "Ver Dashboard";
-        toggleIcon.textContent = "🕒";
+        // toggleIcon.textContent = "🕒";
         renderCalendar();
     } else {
         currentView = "dashboard";
         viewCalendar.className = "calendar-view";
         viewDashboard.className = "dashboard-view active";
         toggleText.textContent = "Ver Calendario";
-        toggleIcon.textContent = "📅";
+        // toggleIcon.textContent = "📅";
     }
 });
 
