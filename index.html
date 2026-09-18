@@ -2,88 +2,117 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#050707">
     <meta name="color-scheme" content="dark">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Desk Dashboard &amp; Calendario</title>
     <style>
         /* =========================================================
-           ESTILOS BASE & FILOSOFÍA LOW-POWER / ANTI BURN-IN
+           RESET & COMPATIBILIDAD FULLY KIOSK BROWSER / OLD WEBVIEWS
            ========================================================= */
         * {
             box-sizing: border-box;
+            -webkit-box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
         }
 
         html, body {
-            margin: 0;
-            padding: 0;
             width: 100%;
+            height: 100%;
             min-height: 100%;
             background-color: #050707;
             color: #cbd3d3;
-            font-family: Arial, Helvetica, -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            /* Evita que navegadores como Chrome/Fully Kiosk inflen o compriman fuentes arbitrariamente */
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             overflow-x: hidden;
-            touch-action: manipulation;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Contenedor Principal */
+        /* Contenedor Kiosk Adaptable */
         .dashboard-container {
             width: 100%;
-            max-width: 960px;
+            max-width: 1140px;
             min-height: 100vh;
             margin: 0 auto;
-            padding: 24px 20px;
+            padding: 16px 20px 20px 20px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
             flex-direction: column;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
             justify-content: space-between;
-            gap: 20px;
             position: relative;
         }
 
-        /* Barra de Navegación / Conmutador Superior */
+        /* Barra de Navegación Superior */
         .top-nav {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
             justify-content: space-between;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
             border-bottom: 1px solid #11191a;
-            padding-bottom: 14px;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
         }
 
         .brand-badge {
-            font-size: 11px;
+            font-size: 13px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: #435152;
-            font-weight: bold;
+            color: #485859;
+            font-weight: 600;
         }
 
         .view-switch-btn {
-            background: #0a0f10;
-            border: 1px solid #162224;
-            color: #8c9e9f;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
+            background: #0b1112;
+            border: 1px solid #182527;
+            color: #8fa2a3;
+            padding: 9px 18px;
+            border-radius: 24px;
+            font-size: 14px;
             cursor: pointer;
+            display: -webkit-inline-box;
+            display: -webkit-inline-flex;
+            display: -ms-inline-flexbox;
             display: inline-flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
             gap: 8px;
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+            transition: all 0.2s ease;
         }
 
         .view-switch-btn:active {
-            background: #141f21;
-            color: #cbd3d3;
-            border-color: #2e4346;
+            background: #162426;
+            color: #e0e9e9;
+            border-color: #3b575a;
         }
 
         .view-switch-btn .icon {
-            font-size: 14px;
+            font-size: 16px;
             line-height: 1;
         }
 
@@ -91,468 +120,649 @@
         .view-section {
             display: none;
             width: 100%;
-            flex: 1;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1 1 auto;
+            -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
         }
 
         .view-section.active {
             display: block;
-            animation: fadeIn 0.25s ease-out;
+            -webkit-animation: fadeIn 0.2s ease-out;
+            animation: fadeIn 0.2s ease-out;
         }
 
+        @-webkit-keyframes fadeIn {
+            from { opacity: 0.3; }
+            to { opacity: 1; }
+        }
         @keyframes fadeIn {
-            from { opacity: 0.2; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0.3; }
+            to { opacity: 1; }
         }
 
         /* =========================================================
-           VISTA 1: DASHBOARD PRINCIPAL
+           VISTA 1: DASHBOARD
            ========================================================= */
         .main-dashboard {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
             flex-direction: column;
-            gap: 28px;
+            gap: 24px;
             justify-content: center;
             padding: 10px 0;
         }
 
         .clock-section {
             text-align: center;
-            padding: 10px 0;
+            padding: 10px 0 6px;
         }
 
         .date {
             color: #596667;
-            font-size: 17px;
+            font-size: 19px;
             letter-spacing: 1px;
             text-transform: capitalize;
         }
 
         .clock {
-            margin-top: 10px;
+            margin-top: 6px;
             color: #cbd3d3;
-            font-size: 130px;
-            line-height: 0.9;
+            font-size: 140px;
+            line-height: 0.88;
             font-weight: 300;
-            letter-spacing: -5px;
+            letter-spacing: -6px;
         }
 
         .seconds {
-            margin-top: 14px;
-            color: #343f40;
-            font-size: 13px;
+            margin-top: 12px;
+            color: #384546;
+            font-size: 14px;
             font-variant-numeric: tabular-nums;
         }
 
-        /* Sección Clima */
         .weather {
             border-top: 1px solid #11191a;
             border-bottom: 1px solid #11191a;
-            padding: 22px 4px;
+            padding: 20px 8px;
         }
 
         .weather-main {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
-            gap: 20px;
+            gap: 22px;
         }
 
         .weather-icon {
-            width: 65px;
+            width: 70px;
             text-align: center;
-            font-size: 44px;
+            font-size: 48px;
             filter: saturate(0.45);
         }
 
         .temperature {
-            color: #aebbbb;
-            font-size: 54px;
+            color: #afbcbc;
+            font-size: 56px;
             font-weight: 300;
             line-height: 1;
         }
 
         .condition {
             margin-top: 6px;
-            color: #596667;
-            font-size: 15px;
+            color: #5b696a;
+            font-size: 16px;
         }
 
         .weather-info {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
             justify-content: space-between;
-            margin-top: 16px;
-            color: #465354;
-            font-size: 12px;
+            margin-top: 14px;
+            color: #495657;
+            font-size: 13px;
         }
 
-        /* Tareas Dashboard */
         .todo {
             width: 100%;
-            max-width: 640px;
+            max-width: 680px;
             margin: 0 auto;
         }
 
         .section-title {
             margin-bottom: 12px;
-            color: #849091;
-            font-size: 16px;
-            letter-spacing: 0.5px;
+            color: #8a9798;
+            font-size: 17px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
             justify-content: space-between;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
         }
 
-        .todo-form {
+        .todo-form, .cal-input-form {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
             gap: 8px;
         }
 
         .todo-form input, .cal-input-form input {
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
             flex: 1;
             min-width: 0;
             padding: 12px 14px;
-            border: 1px solid #141f21;
+            border: 1px solid #141f20;
             border-radius: 8px;
             outline: none;
-            background: #090c0d;
+            background: #080c0d;
             color: #bac4c4;
-            font-size: 15px;
-            user-select: text;
+            font-size: 16px;
             -webkit-user-select: text;
-        }
-
-        .todo-form input::placeholder, .cal-input-form input::placeholder {
-            color: #384344;
+            user-select: text;
         }
 
         .todo-form input:focus, .cal-input-form input:focus {
-            border-color: #2b3e40;
+            border-color: #2e4446;
         }
 
         .btn-action {
-            width: 46px;
-            height: 44px;
-            border: 1px solid #141f21;
+            width: 48px;
+            height: 46px;
+            border: 1px solid #141f20;
             border-radius: 8px;
-            background: #0a0f10;
-            color: #728889;
-            font-size: 22px;
-            line-height: 1;
+            background: #090e0f;
+            color: #728788;
+            font-size: 24px;
             cursor: pointer;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
             justify-content: center;
         }
 
         .btn-action:active {
-            background: #141f21;
-            color: #cbd3d3;
+            background: #162426;
+            color: #e0e9e9;
         }
 
         .todo-list, .cal-notes-list {
             list-style: none;
-            padding: 0;
-            margin: 12px 0 0;
+            margin-top: 10px;
         }
 
         .todo-item {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
             justify-content: space-between;
             gap: 12px;
-            padding: 10px 4px;
+            padding: 12px 4px;
             border-bottom: 1px solid #0e1516;
         }
 
         .todo-item label {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
             gap: 12px;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
             flex: 1;
             cursor: pointer;
         }
 
         .todo-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
             accent-color: #556c6e;
             cursor: pointer;
-            margin: 0;
         }
 
         .todo-item span {
-            color: #9ca9aa;
-            font-size: 15px;
-            line-height: 1.3;
+            color: #9daaaa;
+            font-size: 16px;
+            line-height: 1.35;
             word-break: break-word;
         }
 
         .todo-item.done span {
-            color: #384344;
+            color: #3b4748;
             text-decoration: line-through;
         }
 
         .delete-btn {
             border: 0;
             background: transparent;
-            color: #3a4748;
-            font-size: 20px;
-            padding: 4px 8px;
+            color: #3b4748;
+            font-size: 24px;
+            padding: 6px 12px;
             cursor: pointer;
             line-height: 1;
         }
 
         .delete-btn:active {
-            color: #8c4a4a;
+            color: #9f4949;
         }
 
         .todo-empty {
             padding-top: 14px;
-            color: #384445;
-            font-size: 13px;
+            color: #384546;
+            font-size: 14px;
             font-style: italic;
         }
 
         /* =========================================================
-           VISTA 2: CALENDARIO ELEGANTE & DETALLES DEL DÍA
+           VISTA 2: CALENDARIO OPTIMIZADO PARA TABLET / FULLY KIOSK
            ========================================================= */
         .calendar-view {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
             flex-direction: column;
-            gap: 18px;
+            gap: 16px;
+            width: 100%;
         }
 
-        /* Mini cabecera con hora reducida */
+        /* Cabecera del Calendario */
         .cal-mini-header {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
             justify-content: space-between;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
-            padding: 6px 0 12px;
+            padding: 6px 0 14px 0;
             border-bottom: 1px solid #11191a;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .cal-mini-clock {
-            font-size: 26px;
+            font-size: 32px;
             font-weight: 300;
-            color: #8a9999;
+            color: #92a3a3;
             letter-spacing: -0.5px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: baseline;
+            -webkit-align-items: baseline;
+            -ms-flex-align: baseline;
             align-items: baseline;
-            gap: 6px;
+            gap: 8px;
         }
 
         .cal-mini-clock small {
-            font-size: 13px;
-            color: #414e50;
+            font-size: 14px;
+            color: #495859;
+            text-transform: capitalize;
         }
 
         .cal-controls {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .cal-nav-btn {
             background: #090e0f;
-            border: 1px solid #141f20;
-            color: #728485;
-            font-size: 13px;
-            padding: 6px 12px;
-            border-radius: 6px;
+            border: 1px solid #162426;
+            color: #7b8f90;
+            font-size: 15px;
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
+            min-height: 40px;
+            min-width: 60px;
         }
 
         .cal-nav-btn:active {
-            background: #141e20;
-            color: #cbd3d3;
+            background: #162426;
+            color: #e0e9e9;
         }
 
         .cal-month-title {
-            color: #a6b5b5;
-            font-size: 17px;
+            color: #b1c1c1;
+            font-size: 20px;
             font-weight: 400;
             text-transform: capitalize;
-            min-width: 130px;
+            min-width: 170px;
             text-align: center;
         }
 
-        /* Layout del Calendario */
-        .cal-grid-layout {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr;
+        /* Layout Grid Tablet: 60% Calendario / 40% Tareas del día */
+        .cal-layout-grid {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
             gap: 20px;
-            margin-top: 4px;
+            width: 100%;
+            -webkit-box-align: stretch;
+            -webkit-align-items: stretch;
+            -ms-flex-align: stretch;
+            align-items: stretch;
         }
 
-        /* Tabla del mes */
         .calendar-card {
-            background: #070a0b;
-            border: 1px solid #11191a;
+            -webkit-box-flex: 1.5;
+            -webkit-flex: 1.5;
+            -ms-flex: 1.5;
+            flex: 1.5;
+            min-width: 0;
+            background: #070b0c;
+            border: 1px solid #111a1b;
             border-radius: 12px;
-            padding: 16px;
+            padding: 16px 18px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
         }
 
         .cal-weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            width: 100%;
             text-align: center;
-            color: #485657;
-            font-size: 12px;
+            color: #4b5a5b;
+            font-size: 14px;
             font-weight: 600;
             padding-bottom: 10px;
-            border-bottom: 1px solid #101618;
+            border-bottom: 1px solid #101819;
             margin-bottom: 8px;
         }
 
         .cal-weekdays span {
-            padding: 4px 0;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
+        /* Evita dependencias frágiles de aspect-ratio en tablets antiguas */
         .cal-days-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            width: 100%;
+            gap: 4px;
         }
 
         .cal-cell {
-            aspect-ratio: 1;
+            width: calc(14.285% - 4px);
+            min-height: 64px;
+            padding: 8px 4px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
             flex-direction: column;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
             justify-content: center;
             border-radius: 8px;
-            font-size: 15px;
-            color: #7d8b8c;
-            background: transparent;
-            border: 1px solid transparent;
+            font-size: 19px;
+            color: #7b8a8b;
+            background: #080d0e;
+            border: 1px solid #0f1718;
             cursor: pointer;
             position: relative;
-            transition: background 0.15s, border-color 0.15s;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .cal-cell.other-month {
             color: #212c2d;
+            background: transparent;
+            border-color: transparent;
             cursor: default;
         }
 
         .cal-cell:not(.other-month):active {
-            background: #121a1c;
+            background: #142123;
         }
 
-        /* Resalte de la semana actual */
-        .cal-cell.in-current-week {
-            background: #090e0f;
+        /* Resalte de la semana en curso */
+        .cal-cell.in-current-week:not(.other-month) {
+            background: #0c1415;
+            border-color: #172628;
         }
 
         /* Día de hoy */
         .cal-cell.is-today {
             color: #55c2bb;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         .cal-cell.is-today::before {
             content: "";
             position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 4px;
-            height: 4px;
+            top: 6px;
+            right: 6px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: #55c2bb;
+            box-shadow: 0 0 5px rgba(85, 194, 187, 0.4);
         }
 
         /* Día seleccionado */
         .cal-cell.selected {
-            background: #152426 !important;
-            border-color: #3b575a !important;
-            color: #e4eded !important;
+            background: #182a2c !important;
+            border-color: #3b5a5e !important;
+            color: #eff6f6 !important;
         }
 
-        /* Indicador de notas en el calendario */
-        .cal-cell .badge-dot {
+        /* Indicador de notas / tareas del día */
+        .cal-cell .badge-indicator {
             position: absolute;
-            bottom: 4px;
-            width: 5px;
-            height: 5px;
+            bottom: 5px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            gap: 3px;
+        }
+
+        .cal-cell .badge-dot {
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: #8b7355;
+            background: #506162;
         }
 
         .cal-cell.has-pending-badge .badge-dot {
-            background: #a98858;
-            box-shadow: 0 0 3px rgba(169, 136, 88, 0.4);
+            background: #c29959;
+            box-shadow: 0 0 4px rgba(194, 153, 89, 0.5);
         }
 
-        /* Panel lateral de notas del día seleccionado */
+        /* Panel lateral de detalle del día */
         .day-detail-card {
-            background: #070a0b;
-            border: 1px solid #11191a;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            min-width: 0;
+            background: #070b0c;
+            border: 1px solid #111a1b;
             border-radius: 12px;
-            padding: 16px;
+            padding: 16px 18px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
             flex-direction: column;
         }
 
         .day-header-info {
             padding-bottom: 12px;
-            border-bottom: 1px solid #11191a;
+            border-bottom: 1px solid #111a1b;
             margin-bottom: 12px;
         }
 
         .day-header-title {
-            font-size: 17px;
+            font-size: 19px;
             color: #cbd3d3;
-            font-weight: normal;
+            font-weight: 500;
             text-transform: capitalize;
         }
 
         .day-header-sub {
-            font-size: 12px;
-            color: #4b5859;
+            font-size: 13px;
+            color: #4f5d5e;
             margin-top: 4px;
         }
 
-        .cal-input-form {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
         .cal-notes-scroll {
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
             flex: 1;
             overflow-y: auto;
-            max-height: 280px;
+            max-height: 420px;
+            padding-right: 4px;
         }
 
-        /* =========================================================
-           FOOTER
-           ========================================================= */
+        /* Scrollbar tenue para evitar destellos */
+        .cal-notes-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .cal-notes-scroll::-webkit-scrollbar-thumb {
+            background: #162426;
+            border-radius: 4px;
+        }
+
+        /* Footer */
         footer {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
             justify-content: space-between;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
-            color: #374344;
-            font-size: 11px;
-            border-top: 1px solid #101618;
+            color: #3b4849;
+            font-size: 12px;
+            border-top: 1px solid #101718;
             padding-top: 14px;
+            margin-top: 14px;
         }
 
         footer button {
             border: 0;
             background: transparent;
-            color: #475859;
+            color: #4a5c5d;
             cursor: pointer;
-            padding: 6px 10px;
-            font-size: 12px;
+            padding: 8px 12px;
+            font-size: 13px;
         }
 
         footer button:active {
-            color: #799596;
+            color: #8fa5a6;
         }
 
         /* =========================================================
-           SCREEN SAVER (PROTECCIÓN OLED / ANTI-BURN-IN)
+           SCREENSAVER TENUE ANTI BURN-IN
            ========================================================= */
         .screensaver {
             position: fixed;
@@ -561,31 +771,48 @@
             width: 100%;
             height: 100%;
             display: none;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
             justify-content: center;
             background: #020303;
-            z-index: 999;
+            z-index: 9999;
             cursor: pointer;
         }
 
         .screensaver.active {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
             display: flex;
         }
 
         #screensaver-clock {
             color: #12191a;
-            font-size: 11vw;
+            font-size: 12vw;
             font-weight: 300;
             transition: transform 15s linear;
         }
 
         /* =========================================================
-           RESPONSIVIDAD TABLET Y SMARTPHONE
+           ADAPTACIONES TABLET VERTICAL / TELÉFONO
            ========================================================= */
-        @media (max-width: 768px) {
-            .dashboard-container {
-                padding: 16px 14px;
-                gap: 16px;
+        @media (max-width: 860px) {
+            .cal-layout-grid {
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -webkit-flex-direction: column;
+                -ms-flex-direction: column;
+                flex-direction: column;
+            }
+
+            .cal-cell {
+                min-height: 52px;
+                font-size: 17px;
             }
 
             .clock {
@@ -595,14 +822,6 @@
 
             .temperature {
                 font-size: 46px;
-            }
-
-            .cal-grid-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .cal-cell {
-                font-size: 14px;
             }
         }
     </style>
@@ -615,7 +834,7 @@
     <!-- BARRA SUPERIOR CON CONMUTADOR -->
     <header class="top-nav">
         <div class="brand-badge">Chillán Kiosk</div>
-        <button id="view-toggle-btn" class="view-switch-btn" type="button" aria-label="Cambiar modo de pantalla">
+        <button id="view-toggle-btn" class="view-switch-btn" type="button" aria-label="Cambiar vista">
             <span class="icon">📅</span>
             <span id="view-toggle-label">Ver Calendario</span>
         </button>
@@ -654,7 +873,7 @@
             <section class="todo">
                 <div class="section-title">
                     <span>Tareas de hoy</span>
-                    <span id="todo-count" style="font-size: 12px; color: #445354;"></span>
+                    <span id="todo-count" style="font-size: 13px; color: #4b5b5c;"></span>
                 </div>
 
                 <form id="todo-form" class="todo-form">
@@ -670,7 +889,7 @@
     </main>
 
     <!-- =========================================================
-         VISTA 2: CALENDARIO CONFORTABLE & NOTAS DE FECHA
+         VISTA 2: CALENDARIO ELEGANTE & DETALLES DEL DÍA
          ========================================================= -->
     <section id="view-calendar" class="view-section">
         <div class="calendar-view">
@@ -688,10 +907,10 @@
                 </div>
             </div>
 
-            <!-- GRID PRINCIPAL Y NOTAS DEL DÍA -->
-            <div class="cal-grid-layout">
+            <!-- CUADRÍCULA CALENDARIO + PANEL DE NOTAS -->
+            <div class="cal-layout-grid">
 
-                <!-- TARJETA DEL CALENDARIO -->
+                <!-- CALENDARIO -->
                 <div class="calendar-card">
                     <div class="cal-weekdays">
                         <span>Lun</span>
@@ -703,11 +922,11 @@
                         <span>Dom</span>
                     </div>
                     <div id="cal-days-grid" class="cal-days-grid">
-                        <!-- Días inyectados dinámicamente -->
+                        <!-- Celdas renderizadas dinámicamente -->
                     </div>
                 </div>
 
-                <!-- TARJETA DE NOTAS / TAREAS DEL DÍA SELECCIONADO -->
+                <!-- TAREAS / NOTAS DEL DÍA -->
                 <div class="day-detail-card">
                     <div class="day-header-info">
                         <div id="cal-selected-day-title" class="day-header-title">Selecciona un día</div>
@@ -738,20 +957,20 @@
 
 </div>
 
-<!-- PROTECTOR DE PANTALLA CONTRA MARCAS ESTÁTICAS -->
+<!-- SCREEN SAVER ANTI BURN-IN -->
 <div id="screensaver" class="screensaver">
     <div id="screensaver-clock">00:00</div>
 </div>
 
 <!-- =========================================================
-     LÓGICA JAVASCRIPT ES5 (COMPATIBLE CON NAVEGADORES ANTIGUOS)
+     JAVASCRIPT ES5 (COMPATIBLE CON NAVEGADORES ANTIGUOS)
      ========================================================= -->
 <script>
 /*
     DESK DASHBOARD & CALENDAR
-    - Totalmente compatible con WebKit antiguo (ES5).
+    - Estricto JavaScript ES5.
     - Sin fetch ni arrow functions.
-    - Utiliza XMLHttpRequest y LocalStorage.
+    - Soporte nativo para WebView / Fully Kiosk Browser en Android.
 */
 
 var CONFIG = {
@@ -764,23 +983,17 @@ var CONFIG = {
 var DAYS_ES = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
 var MONTHS_ES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 
-/*
-    ESTADO DE LA APLICACIÓN
-*/
 var currentView = "dashboard"; // 'dashboard' | 'calendar'
 var calDisplayYear = new Date().getFullYear();
 var calDisplayMonth = new Date().getMonth(); // 0 - 11
-var selectedDateStr = formatDateKey(new Date()); // Formato YYYY-MM-DD
+var selectedDateStr = formatDateKey(new Date());
 
-/* Tareas del Dashboard Principal */
 var TODO_KEY = "desk-dashboard-todos-v2";
 var todos = [];
 
-/* Tareas/Notas por Día del Calendario */
 var CAL_TASKS_KEY = "desk-calendar-day-tasks-v1";
-var calendarNotes = {}; // { 'YYYY-MM-DD': [ { text: '...', done: false } ] }
+var calendarNotes = {};
 
-/* Elementos del DOM */
 var clockElement = document.getElementById("clock");
 var secondsElement = document.getElementById("seconds");
 var dateElement = document.getElementById("date");
@@ -827,14 +1040,12 @@ function updateClock() {
     var minutes = padZero(now.getMinutes());
     var seconds = padZero(now.getSeconds());
 
-    /* Reloj de la vista principal */
     if (clockElement) clockElement.textContent = hours + ":" + minutes;
     if (secondsElement) secondsElement.textContent = seconds;
     if (dateElement) {
         dateElement.textContent = DAYS_ES[now.getDay()] + ", " + now.getDate() + " de " + MONTHS_ES[now.getMonth()];
     }
 
-    /* Reloj reducido de la vista de calendario */
     if (calHeaderTime) calHeaderTime.textContent = hours + ":" + minutes;
     if (calHeaderDate) {
         calHeaderDate.textContent = DAYS_ES[now.getDay()].substring(0, 3) + " " + now.getDate();
@@ -877,7 +1088,7 @@ viewToggleBtn.addEventListener("click", function () {
 
 /*
     =========================================================
-    CLIMA (API OPEN-METEO MEDIANTE XHR)
+    CLIMA (API OPEN-METEO VIA XHR)
     =========================================================
 */
 var weatherCodes = {
@@ -956,13 +1167,13 @@ function showWeatherError() {
 }
 
 loadWeather();
-setInterval(loadWeather, 30 * 60 * 1000); // Cada 30 minutos
+setInterval(loadWeather, 30 * 60 * 1000);
 
 document.getElementById("refresh-weather").addEventListener("click", loadWeather);
 
 /*
     =========================================================
-    TAREAS DE HOY (DASHBOARD PRINCIPAL)
+    TAREAS DE HOY (DASHBOARD)
     =========================================================
 */
 function loadTodos() {
@@ -1060,7 +1271,7 @@ loadTodos();
 
 /*
     =========================================================
-    VISTA DE CALENDARIO & GESTIÓN DE NOTAS POR FECHA
+    VISTA DE CALENDARIO & GESTIÓN DE NOTAS POR DÍA
     =========================================================
 */
 function loadCalendarNotes() {
@@ -1079,16 +1290,13 @@ function saveCalendarNotes() {
     } catch (e) {}
 }
 
-/* Determinar si una fecha cae en la semana en curso */
 function isDateInCurrentWeek(targetDate) {
     var now = new Date();
-    // Ajuste de lunes a domingo
     var dayOfWeek = (now.getDay() + 6) % 7; // Lunes = 0, Domingo = 6
     var startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayOfWeek);
     startOfWeek.setHours(0, 0, 0, 0);
 
     var endOfWeek = new Date(startOfWeek.getTime() + 7 * 24 * 60 * 60 * 1000);
-
     return targetDate >= startOfWeek && targetDate < endOfWeek;
 }
 
@@ -1098,17 +1306,13 @@ function renderCalendar() {
 
     var todayKey = formatDateKey(new Date());
 
-    // Primer día del mes seleccionado
     var firstDayOfMonth = new Date(calDisplayYear, calDisplayMonth, 1);
-    // Día de la semana (ajustado: 0 = Lunes, 6 = Domingo)
-    var startDay = (firstDayOfMonth.getDay() + 6) % 7;
+    var startDay = (firstDayOfMonth.getDay() + 6) % 7; // 0 = Lunes, 6 = Domingo
 
-    // Cantidad de días en el mes actual
     var daysInCurrentMonth = new Date(calDisplayYear, calDisplayMonth + 1, 0).getDate();
-    // Cantidad de días en el mes anterior
     var daysInPrevMonth = new Date(calDisplayYear, calDisplayMonth, 0).getDate();
 
-    // 1. Días del mes anterior (relleno inicial)
+    // 1. Relleno mes anterior
     for (var p = startDay - 1; p >= 0; p--) {
         var cellPrev = document.createElement("div");
         cellPrev.className = "cal-cell other-month";
@@ -1116,7 +1320,7 @@ function renderCalendar() {
         calDaysGrid.appendChild(cellPrev);
     }
 
-    // 2. Días del mes actual
+    // 2. Días mes actual
     for (var d = 1; d <= daysInCurrentMonth; d++) {
         (function (dayNum) {
             var dateObj = new Date(calDisplayYear, calDisplayMonth, dayNum);
@@ -1126,26 +1330,26 @@ function renderCalendar() {
             cell.className = "cal-cell";
             cell.textContent = dayNum;
 
-            // Resalte de semana actual
             if (isDateInCurrentWeek(dateObj)) {
                 cell.className += " in-current-week";
             }
 
-            // Es hoy
             if (dateKey === todayKey) {
                 cell.className += " is-today";
             }
 
-            // Está seleccionado
             if (dateKey === selectedDateStr) {
                 cell.className += " selected";
             }
 
-            // Ver si tiene tareas/notas
             var notesForDay = calendarNotes[dateKey];
             if (notesForDay && notesForDay.length > 0) {
+                var indicator = document.createElement("div");
+                indicator.className = "badge-indicator";
+
                 var dot = document.createElement("div");
                 dot.className = "badge-dot";
+                indicator.appendChild(dot);
 
                 var hasPending = false;
                 for (var k = 0; k < notesForDay.length; k++) {
@@ -1157,10 +1361,9 @@ function renderCalendar() {
                 if (hasPending) {
                     cell.className += " has-pending-badge";
                 }
-                cell.appendChild(dot);
+                cell.appendChild(indicator);
             }
 
-            // Evento selección de día
             cell.addEventListener("click", function () {
                 selectedDateStr = dateKey;
                 renderCalendar();
@@ -1171,7 +1374,7 @@ function renderCalendar() {
         })(d);
     }
 
-    // 3. Relleno final hasta completar la cuadrícula (múltiplo de 7)
+    // 3. Relleno final múltiplo de 7
     var totalCells = startDay + daysInCurrentMonth;
     var remainder = totalCells % 7;
     if (remainder > 0) {
@@ -1256,7 +1459,6 @@ function renderSelectedDayNotes() {
     }
 }
 
-/* Navegación del Calendario (Anterior / Siguiente) */
 document.getElementById("cal-prev-btn").addEventListener("click", function () {
     calDisplayMonth--;
     if (calDisplayMonth < 0) {
@@ -1275,7 +1477,6 @@ document.getElementById("cal-next-btn").addEventListener("click", function () {
     renderCalendar();
 });
 
-/* Formulario para agregar notas al día seleccionado */
 document.getElementById("cal-day-form").addEventListener("submit", function (e) {
     e.preventDefault();
     var text = calDayInput.value.trim();
@@ -1296,11 +1497,11 @@ loadCalendarNotes();
 
 /*
     =========================================================
-    SALVAPANTALLAS TENUE (PROTECCIÓN DE PANTALLAS AMOLED)
+    SCREENSAVER TENUE (PROTECCIÓN DE PANTALLA)
     =========================================================
 */
 var lastInteraction = new Date().getTime();
-var SCREEN_SAVER_DELAY = 30 * 60 * 1000; // 30 minutos sin tocar
+var SCREEN_SAVER_DELAY = 30 * 60 * 1000;
 var screensaver = document.getElementById("screensaver");
 var screensaverClock = document.getElementById("screensaver-clock");
 
@@ -1326,7 +1527,6 @@ function updateScreensaver() {
     var now = new Date();
     screensaverClock.textContent = padZero(now.getHours()) + ":" + padZero(now.getMinutes());
 
-    // Desplazamiento lento de píxeles para evitar degradación uniforme
     var offset = Math.sin(now.getSeconds() / 10) * 8;
     screensaverClock.style.transform = "translateX(" + offset + "px)";
 }
