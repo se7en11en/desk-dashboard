@@ -1,0 +1,365 @@
+
+/*
+    DESK DASHBOARD
+    Diseño deliberadamente sencillo para Android 7
+*/
+
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    min-height: 100%;
+
+    background: #0b0e0f;
+    color: #e5eeee;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+
+/*
+    CONTENEDOR PRINCIPAL
+*/
+
+.dashboard {
+    width: 100%;
+    max-width: 850px;
+
+    min-height: 100vh;
+
+    margin: 0 auto;
+
+    padding: 45px 40px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 35px;
+}
+
+
+/*
+    RELOJ
+*/
+
+.clock-section {
+    text-align: center;
+}
+
+
+.date {
+    color: #7d8b8d;
+
+    font-size: 18px;
+
+    letter-spacing: 1px;
+
+    text-transform: capitalize;
+}
+
+
+.clock {
+    margin-top: 12px;
+
+    font-size: 150px;
+
+    line-height: 0.9;
+
+    font-weight: 300;
+
+    letter-spacing: -6px;
+}
+
+
+.seconds {
+    margin-top: 15px;
+
+    color: #4f6062;
+
+    font-size: 14px;
+}
+
+
+/*
+    CLIMA
+*/
+
+.weather {
+    border-top: 1px solid #182123;
+    border-bottom: 1px solid #182123;
+
+    padding: 25px 0;
+}
+
+
+.weather-main {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+.weather-icon {
+    width: 70px;
+
+    text-align: center;
+
+    font-size: 55px;
+}
+
+
+.temperature {
+    font-size: 58px;
+
+    font-weight: 300;
+}
+
+
+.condition {
+    margin-top: 4px;
+
+    color: #7d8b8d;
+
+    font-size: 16px;
+}
+
+
+.weather-info {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 18px;
+
+    color: #687779;
+
+    font-size: 13px;
+}
+
+
+/*
+    TODO
+*/
+
+.todo {
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: 0 auto;
+}
+
+
+.section-title {
+    margin-bottom: 12px;
+
+    font-size: 19px;
+}
+
+
+.todo-form {
+    display: flex;
+
+    gap: 8px;
+}
+
+
+.todo-form input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 13px 14px;
+
+    border: 1px solid #182426;
+
+    border-radius: 9px;
+
+    outline: none;
+
+    background: #101617;
+
+    color: #e5eeee;
+
+    font-size: 15px;
+}
+
+
+.todo-form input:focus {
+    border-color: #315154;
+}
+
+
+.todo-form button {
+    width: 48px;
+
+    border: 1px solid #182426;
+
+    border-radius: 9px;
+
+    background: #11191a;
+
+    color: #91b8bb;
+
+    font-size: 25px;
+
+    cursor: pointer;
+}
+
+
+/*
+    LISTA
+*/
+
+#todo-list {
+    list-style: none;
+
+    padding: 0;
+
+    margin: 14px 0 0;
+}
+
+
+.todo-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 11px 2px;
+
+    border-bottom: 1px solid #141d1e;
+}
+
+
+.todo-item label {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    flex: 1;
+}
+
+
+.todo-item input {
+    width: 18px;
+    height: 18px;
+
+    accent-color: #719a9d;
+}
+
+
+.todo-item.done span {
+    color: #536163;
+
+    text-decoration: line-through;
+}
+
+
+.delete {
+    border: 0;
+
+    background: transparent;
+
+    color: #59686a;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+.todo-empty {
+    padding-top: 13px;
+
+    color: #536163;
+
+    font-size: 14px;
+}
+
+
+/*
+    FOOTER
+*/
+
+footer {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    color: #536163;
+
+    font-size: 11px;
+}
+
+
+footer button {
+    border: 0;
+
+    background: transparent;
+
+    color: #708688;
+
+    cursor: pointer;
+
+    padding: 8px;
+}
+
+
+/*
+    TABLETS PEQUEÑAS
+*/
+
+@media (max-width: 600px) {
+
+    .dashboard {
+        padding: 30px 22px;
+
+        gap: 28px;
+    }
+
+
+    .clock {
+        font-size: 23vw;
+
+        letter-spacing: -3px;
+    }
+
+
+    .date {
+        font-size: 15px;
+    }
+
+
+    .temperature {
+        font-size: 48px;
+    }
+
+
+    .weather-info {
+        flex-direction: column;
+
+        gap: 6px;
+    }
+
+}
+

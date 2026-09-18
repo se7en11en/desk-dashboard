@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Importante para tablets antiguas -->
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#0b0e0f">
+
+    <title>Desk Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- RELOJ -->
+    <section class="clock-section">
+
+        <div id="date" class="date">
+            Cargando...
+        </div>
+
+        <div id="clock" class="clock">
+            --:--
+        </div>
+
+        <div id="seconds" class="seconds">
+            00
+        </div>
+
+    </section>
+
+
+    <!-- CLIMA -->
+    <section class="weather">
+
+        <div class="weather-main">
+
+            <div id="weather-icon" class="weather-icon">
+                ☀
+            </div>
+
+            <div>
+                <div id="temperature" class="temperature">
+                    --°
+                </div>
+
+                <div id="condition" class="condition">
+                    Cargando clima...
+                </div>
+            </div>
+
+        </div>
+
+        <div class="weather-info">
+
+            <span>
+                Chillán · Chile
+            </span>
+
+            <span id="feels-like">
+                Sensación --°
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- TODO -->
+    <section class="todo">
+
+        <div class="section-title">
+            Hoy
+        </div>
+
+        <form id="todo-form" class="todo-form">
+
+            <input
+                id="todo-input"
+                type="text"
+                maxlength="100"
+                placeholder="Agregar una tarea..."
+                autocomplete="off"
+            >
+
+            <button type="submit">
+                +
+            </button>
+
+        </form>
+
+
+        <ul id="todo-list"></ul>
+
+        <div id="todo-empty" class="todo-empty">
+            No hay tareas pendientes.
+        </div>
+
+    </section>
+
+
+    <!-- PIE -->
+    <footer>
+
+        <span id="weather-updated">
+            Clima: --
+        </span>
+
+        <button id="refresh-weather">
+            Actualizar
+        </button>
+
+    </footer>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
+
