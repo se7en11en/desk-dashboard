@@ -529,6 +529,143 @@ footer button {
 
 /*
     ======================================
+    RESUMEN DE TAREAS (CALENDARIO - SOLO LECTURA)
+    ======================================
+*/
+.cal-summary-section {
+    background-color: #070a0b;
+    border: 1px solid #11191a;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.cal-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #11191a;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.cal-summary-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #aebbbb;
+}
+
+.cal-summary-count {
+    font-size: 13px;
+    color: #596667;
+}
+
+.cal-summary-empty {
+    color: #3d4849;
+    font-size: 14px;
+    padding: 8px 0;
+}
+
+.cal-summary-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -6px;
+}
+
+.cal-summary-card {
+    flex: 1 1 280px;
+    max-width: 100%;
+    margin: 6px;
+    padding: 14px 16px;
+    background-color: #090d0e;
+    border: 1px solid #141f20;
+    border-radius: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.cal-summary-card:hover,
+.cal-summary-card:active {
+    background-color: #0e1517;
+    border-color: #223235;
+}
+
+.cal-summary-card.is-today {
+    border-color: #243c3e;
+}
+
+.cal-summary-card.is-selected {
+    border-color: #3c6569;
+    background-color: #0d1a1c;
+}
+
+.cal-summary-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #101718;
+    padding-bottom: 8px;
+}
+
+.cal-summary-card-date {
+    font-size: 14px;
+    font-weight: 600;
+    color: #cbd3d3;
+    text-transform: capitalize;
+}
+
+.cal-summary-badge-today {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background-color: #1a2c2e;
+    color: #6da2a6;
+    font-weight: 500;
+}
+
+.cal-summary-task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cal-summary-task-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 4px 0;
+    color: #929e9f;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.cal-summary-bullet {
+    color: #4f8084;
+    font-size: 14px;
+    line-height: 1.4;
+    flex-shrink: 0;
+    margin-right: 8px;
+}
+
+.cal-summary-task-text {
+    flex: 1;
+    word-break: break-word;
+}
+
+.cal-summary-task-item.done {
+    color: #3d4849;
+}
+
+.cal-summary-task-item.done .cal-summary-bullet {
+    color: #3d4849;
+}
+
+.cal-summary-task-item.done .cal-summary-task-text {
+    text-decoration: line-through;
+}
+
+/*
+    ======================================
     SCREEN SAVER (GLOBAL)
     ======================================
 */
@@ -794,4 +931,75 @@ body.light-theme {
 
 .light-theme .day-subtitle {
     color: #728486;
+}
+
+/* Resumen de tareas en Modo Claro */
+.light-theme .cal-summary-section {
+    background-color: #ffffff;
+    border-color: #dbe2e3;
+}
+
+.light-theme .cal-summary-header {
+    border-bottom-color: #e5ecec;
+}
+
+.light-theme .cal-summary-title {
+    color: #2b393b;
+}
+
+.light-theme .cal-summary-count {
+    color: #728486;
+}
+
+.light-theme .cal-summary-empty {
+    color: #829496;
+}
+
+.light-theme .cal-summary-card {
+    background-color: #f8fafb;
+    border-color: #e5ecec;
+}
+
+.light-theme .cal-summary-card:hover,
+.light-theme .cal-summary-card:active {
+    background-color: #f0f4f5;
+    border-color: #d1dcdd;
+}
+
+.light-theme .cal-summary-card.is-today {
+    border-color: #a8cbcd;
+}
+
+.light-theme .cal-summary-card.is-selected {
+    border-color: #5a878a;
+    background-color: #ecf3f4;
+}
+
+.light-theme .cal-summary-card-header {
+    border-bottom-color: #e5ecec;
+}
+
+.light-theme .cal-summary-card-date {
+    color: #1e2829;
+}
+
+.light-theme .cal-summary-badge-today {
+    background-color: #dbe8e9;
+    color: #2d5558;
+}
+
+.light-theme .cal-summary-task-item {
+    color: #394749;
+}
+
+.light-theme .cal-summary-bullet {
+    color: #4a7477;
+}
+
+.light-theme .cal-summary-task-item.done {
+    color: #9aa8a9;
+}
+
+.light-theme .cal-summary-task-item.done .cal-summary-bullet {
+    color: #9aa8a9;
 }

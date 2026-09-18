@@ -319,6 +319,8 @@ function renderCalendar() {
 
     // Renderizar panel lateral
     renderSelectedDayPanel();
+    // Renderizar resumen global de tareas (solo lectura)
+    renderCalendarSummary();
 }
 
 function createCalCell(dateObj, isOtherMonth, todayStr, weekRange) {
@@ -414,6 +416,7 @@ function renderSelectedDayPanel() {
                 dayList[idx].done = checkbox.checked;
                 saveCalendarTasks();
                 renderSelectedDayPanel();
+                renderCalendarSummary();
             });
 
             var text = document.createElement("span");
@@ -481,12 +484,129 @@ document.getElementById("cal-next-btn").addEventListener("click", function () {
     renderCalendar();
 });
 
+function renderCalendarSummary() {
+    var container = document.getElementById("cal-summary-list");
+    var empty = document.getElementById("cal-summary-empty");
+    var countEl = document.getElementById("cal-summary-count");
+    if (!container) { return; }
+
+    container.innerHTML = "";
+
+    var dates = [];
+    for (var dateKey in calendarTasks) {
+        if (calendarTasks.hasOwnProperty(dateKey)) {
+            if (calendarTasks[dateKey] && calendarTasks[dateKey].length > 0) {
+                dates.push(dateKey);
+            }
+        }
+    }
+
+    dates.sort();
+
+    var totalTasks = 0;
+    for (var i = 0; i < dates.length; i++) {
+        totalTasks += calendarTasks[dates[i]].length;
+    }
+
+    if (countEl) {
+        countEl.textContent = totalTasks + (totalTasks === 1 ? " tarea" : " tareas");
+    }
+
+    if (dates.length === 0) {
+        if (empty) { empty.style.display = "block"; }
+        return;
+    }
+
+    if (empty) { empty.style.display = "none"; }
+
+    var today = new Date();
+    var todayStr = formatDateISO(today);
+
+    for (var d = 0; d < dates.length; d++) {
+        (function (dateStr) {
+            var taskList = calendarTasks[dateStr];
+            var parts = dateStr.split("-");
+            var dateObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+            var dayName = DAY_NAMES[dateObj.getDay()];
+            var monthName = MONTH_NAMES[dateObj.getMonth()];
+
+            var card = document.createElement("div");
+            card.className = "cal-summary-card";
+            if (dateStr === todayStr) {
+                card.className += " is-today";
+            }
+            if (dateStr === selectedDateStr) {
+                card.className += " is-selected";
+            }
+
+            var header = document.createElement("div");
+            header.className = "cal-summary-card-header";
+
+            var dateTitle = document.createElement("div");
+            dateTitle.className = "cal-summary-card-date";
+            var dateFormatted = dayName + ", " + dateObj.getDate() + " de " + monthName;
+            if (dateObj.getFullYear() !== today.getFullYear()) {
+                dateFormatted += " " + dateObj.getFullYear();
+            }
+            dateTitle.textContent = dateFormatted;
+            header.appendChild(dateTitle);
+
+            if (dateStr === todayStr) {
+                var badge = document.createElement("span");
+                badge.className = "cal-summary-badge-today";
+                badge.textContent = "Hoy";
+                header.appendChild(badge);
+            }
+
+            card.appendChild(header);
+
+            var ul = document.createElement("ul");
+            ul.className = "cal-summary-task-list";
+
+            for (var t = 0; t < taskList.length; t++) {
+                var taskItem = taskList[t];
+                var li = document.createElement("li");
+                li.className = "cal-summary-task-item" + (taskItem.done ? " done" : "");
+
+                var bullet = document.createElement("span");
+                bullet.className = "cal-summary-bullet";
+                bullet.textContent = taskItem.done ? "✓" : "•";
+
+                var textSpan = document.createElement("span");
+                textSpan.className = "cal-summary-task-text";
+                textSpan.textContent = taskItem.text;
+
+                li.appendChild(bullet);
+                li.appendChild(textSpan);
+                ul.appendChild(li);
+            }
+
+            card.appendChild(ul);
+
+            card.addEventListener("click", function () {
+                selectedDateStr = dateStr;
+                var clickedParts = dateStr.split("-");
+                var targetYear = parseInt(clickedParts[0], 10);
+                var targetMonth = parseInt(clickedParts[1], 10) - 1;
+                if (calCurrentYear !== targetYear || calCurrentMonth !== targetMonth) {
+                    calCurrentYear = targetYear;
+                    calCurrentMonth = targetMonth;
+                }
+                renderCalendar();
+            });
+
+            container.appendChild(card);
+        })(dates[d]);
+    }
+}
+
 // Inicializar fecha y mes
 var initDate = new Date();
 calCurrentYear = initDate.getFullYear();
 calCurrentMonth = initDate.getMonth();
 selectedDateStr = formatDateISO(initDate);
 loadCalendarTasks();
+renderCalendarSummary();
 
 /* ==========================================================================
    6. ALTERNAR ENTRE VISTA DASHBOARD Y VISTA CALENDARIO
