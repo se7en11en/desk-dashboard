@@ -192,43 +192,126 @@ function saveCalendarTasks() {
     } catch (e) {}
 }
 
+function formatReadableDate(dateObj) {
+    var dayName = DAY_NAMES[dateObj.getDay()];
+    var monthName = MONTH_NAMES[dateObj.getMonth()];
+    return dayName + ", " + dateObj.getDate() + " de " + monthName;
+}
+
+function createDashboardTaskItem(task) {
+    var item = document.createElement("li");
+    item.className = "dashboard-today-item" + (task.done ? " done" : "");
+
+    var bullet = document.createElement("span");
+    bullet.className = "dashboard-today-bullet";
+    bullet.textContent = task.done ? "✓" : "•";
+
+    var text = document.createElement("span");
+    text.className = "dashboard-today-text";
+    text.textContent = task.text;
+
+    item.appendChild(bullet);
+    item.appendChild(text);
+    return item;
+}
+
+function renderUpcomingDayGroup(container, titleText, tasks) {
+    if (!container) { return; }
+
+    var group = document.createElement("div");
+    group.className = "upcoming-day-group";
+
+    var title = document.createElement("div");
+    title.className = "upcoming-day-title";
+    title.textContent = titleText;
+    group.appendChild(title);
+
+    var ul = document.createElement("ul");
+    ul.className = "dashboard-today-list";
+
+    for (var i = 0; i < tasks.length; i++) {
+        ul.appendChild(createDashboardTaskItem(tasks[i]));
+    }
+
+    group.appendChild(ul);
+    container.appendChild(group);
+}
+
 function renderDashboardTodayTasks() {
+    var section = document.getElementById("dashboard-tasks-section");
     var list = document.getElementById("dashboard-today-list");
     var empty = document.getElementById("dashboard-today-empty");
     var countEl = document.getElementById("dashboard-today-count");
+    var upcomingCol = document.getElementById("dashboard-upcoming-col");
+    var upcomingContent = document.getElementById("dashboard-upcoming-content");
+    var upcomingCountEl = document.getElementById("dashboard-upcoming-count");
+
     if (!list) { return; }
 
     list.innerHTML = "";
+    if (upcomingContent) { upcomingContent.innerHTML = ""; }
 
-    var todayStr = formatDateISO(new Date());
+    var today = new Date();
+    var todayStr = formatDateISO(today);
     var todayList = (calendarTasks && calendarTasks[todayStr]) ? calendarTasks[todayStr] : [];
 
+    // Tareas de los 2 días siguientes (mañana y pasado mañana)
+    var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    var tomorrowStr = formatDateISO(tomorrow);
+    var tomorrowList = (calendarTasks && calendarTasks[tomorrowStr]) ? calendarTasks[tomorrowStr] : [];
+
+    var dayAfter = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 2);
+    var dayAfterStr = formatDateISO(dayAfter);
+    var dayAfterList = (calendarTasks && calendarTasks[dayAfterStr]) ? calendarTasks[dayAfterStr] : [];
+
+    var totalUpcoming = tomorrowList.length + dayAfterList.length;
+    var hasUpcoming = totalUpcoming > 0;
+
+    // Si existen tareas para los próximos 2 días, dividir la sección en 2
+    if (hasUpcoming) {
+        if (section) {
+            if (section.classList) {
+                section.classList.add("split-mode");
+            } else if (section.className.indexOf("split-mode") === -1) {
+                section.className = (section.className + " split-mode").trim();
+            }
+        }
+        if (upcomingCol) { upcomingCol.style.display = "block"; }
+        if (upcomingCountEl) {
+            upcomingCountEl.textContent = totalUpcoming + (totalUpcoming === 1 ? " tarea" : " tareas");
+        }
+
+        if (tomorrowList.length > 0) {
+            renderUpcomingDayGroup(upcomingContent, "Mañana · " + formatReadableDate(tomorrow), tomorrowList);
+        }
+
+        if (dayAfterList.length > 0) {
+            renderUpcomingDayGroup(upcomingContent, "Pasado mañana · " + formatReadableDate(dayAfter), dayAfterList);
+        }
+    } else {
+        // Si no hay tareas próximas, ocupar todo el espacio en formato único actual
+        if (section) {
+            if (section.classList) {
+                section.classList.remove("split-mode");
+            } else {
+                section.className = section.className.replace(/\bsplit-mode\b/g, "").replace(/\s+/g, " ").trim();
+            }
+        }
+        if (upcomingCol) { upcomingCol.style.display = "none"; }
+    }
+
+    // Renderizar columna de hoy
     if (countEl) {
         countEl.textContent = todayList.length + (todayList.length === 1 ? " tarea" : " tareas");
     }
 
     if (todayList.length === 0) {
         if (empty) { empty.style.display = "block"; }
-        return;
-    }
-
-    if (empty) { empty.style.display = "none"; }
-
-    for (var i = 0; i < todayList.length; i++) {
-        var item = document.createElement("li");
-        item.className = "dashboard-today-item" + (todayList[i].done ? " done" : "");
-
-        var bullet = document.createElement("span");
-        bullet.className = "dashboard-today-bullet";
-        bullet.textContent = todayList[i].done ? "✓" : "•";
-
-        var text = document.createElement("span");
-        text.className = "dashboard-today-text";
-        text.textContent = todayList[i].text;
-
-        item.appendChild(bullet);
-        item.appendChild(text);
-        list.appendChild(item);
+    } else {
+        if (empty) { empty.style.display = "none"; }
+        for (var i = 0; i < todayList.length; i++) {
+            list.appendChild(createDashboardTaskItem(todayList[i]));
+        }
     }
 }
 

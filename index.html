@@ -74,14 +74,28 @@
                 </div>
             </section>
 
-            <!-- Resumen de Tareas de Hoy (Solo lectura) -->
-            <section class="todo">
-                <div class="today-tasks-header">
-                    <div class="section-title">Tareas de Hoy</div>
-                    <span id="dashboard-today-count" class="today-tasks-count">0 tareas</span>
+            <!-- Resumen de Tareas en Dashboard (Solo lectura, adaptable a 2 columnas) -->
+            <section id="dashboard-tasks-section" class="todo dashboard-tasks-section">
+                <div class="dashboard-tasks-layout">
+                    <!-- Columna Izquierda: Hoy -->
+                    <div id="dashboard-today-col" class="dashboard-tasks-col">
+                        <div class="today-tasks-header">
+                            <div class="section-title">Tareas de Hoy</div>
+                            <span id="dashboard-today-count" class="today-tasks-count">0 tareas</span>
+                        </div>
+                        <ul id="dashboard-today-list" class="dashboard-today-list"></ul>
+                        <div id="dashboard-today-empty" class="todo-empty">No hay tareas programadas para hoy.</div>
+                    </div>
+
+                    <!-- Columna Derecha: Próximos 2 Días (Oculta si no hay tareas) -->
+                    <div id="dashboard-upcoming-col" class="dashboard-tasks-col" style="display: none;">
+                        <div class="today-tasks-header">
+                            <div class="section-title">Próximos Días</div>
+                            <span id="dashboard-upcoming-count" class="today-tasks-count">0 tareas</span>
+                        </div>
+                        <div id="dashboard-upcoming-content" class="dashboard-upcoming-content"></div>
+                    </div>
                 </div>
-                <ul id="dashboard-today-list" class="dashboard-today-list"></ul>
-                <div id="dashboard-today-empty" class="todo-empty">No hay tareas programadas para hoy.</div>
             </section>
 
             <!-- Footer -->

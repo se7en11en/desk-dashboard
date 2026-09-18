@@ -184,9 +184,69 @@ body {
 }
 
 .todo {
+    padding-top: 10px;
     width: 100%;
     max-width: 650px;
     margin: 0 auto;
+}
+
+.dashboard-tasks-section {
+    transition: max-width 0.25s ease;
+}
+
+.dashboard-tasks-section.split-mode {
+    max-width: 820px;
+}
+
+.dashboard-tasks-layout {
+    width: 100%;
+}
+
+.dashboard-tasks-section.split-mode .dashboard-tasks-layout {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+.dashboard-tasks-section.split-mode .dashboard-tasks-col {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 0%;
+    flex: 1 1 0%;
+    min-width: 0;
+}
+
+.dashboard-tasks-section.split-mode .dashboard-tasks-col:first-child {
+    margin-right: 24px;
+}
+
+.upcoming-day-group {
+    margin-bottom: 12px;
+}
+
+.upcoming-day-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #728889;
+    text-transform: capitalize;
+    margin: 10px 0 6px;
+}
+
+.upcoming-day-group:first-child .upcoming-day-title {
+    margin-top: 0;
+}
+
+@media (max-width: 680px) {
+    .dashboard-tasks-section.split-mode .dashboard-tasks-layout {
+        -webkit-flex-direction: column;
+        flex-direction: column;
+    }
+
+    .dashboard-tasks-section.split-mode .dashboard-tasks-col:first-child {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
 }
 
 .today-tasks-header {
@@ -349,6 +409,7 @@ body {
 }
 
 footer {
+    padding-top: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1089,4 +1150,8 @@ body.light-theme {
 
 .light-theme .dashboard-today-item.done .dashboard-today-bullet {
     color: #9aa8a9;
+}
+
+.light-theme .upcoming-day-title {
+    color: #556e70;
 }
