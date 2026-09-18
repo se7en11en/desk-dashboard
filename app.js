@@ -639,7 +639,7 @@ toggleBtn.addEventListener("click", function () {
    7. SCREEN SAVER (GLOBAL PARA CUALQUIER VISTA)
    ========================================================================== */
 var lastInteraction = new Date().getTime();
-var SCREEN_SAVER_DELAY = 30 * 60 * 1000;
+var SCREEN_SAVER_DELAY = 5 * 60 * 1000;
 var screensaver = document.getElementById("screensaver");
 var screensaverClock = document.getElementById("screensaver-clock");
 
