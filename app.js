@@ -144,102 +144,37 @@ setInterval(loadWeather, 30 * 60 * 1000);
 document.getElementById("refresh-weather").addEventListener("click", loadWeather);
 
 /* ==========================================================================
-   4. TAREAS RÁPIDAS DEL DASHBOARD (HOY)
-   ========================================================================== */
-var TODO_KEY = "desk-dashboard-todos-v2";
-var todos = [];
-
-function loadTodos() {
-    try {
-        var saved = localStorage.getItem(TODO_KEY);
-        if (saved) { todos = JSON.parse(saved); }
-    } catch (e) {
-        todos = [];
-    }
-    renderTodos();
-}
-
-function saveTodos() {
-    try {
-        localStorage.setItem(TODO_KEY, JSON.stringify(todos));
-    } catch (e) {}
-}
-
-function renderTodos() {
-    var list = document.getElementById("todo-list");
-    var empty = document.getElementById("todo-empty");
-    list.innerHTML = "";
-
-    if (todos.length === 0) {
-        empty.style.display = "block";
-        return;
-    }
-
-    empty.style.display = "none";
-
-    for (var i = 0; i < todos.length; i++) {
-        (function (index) {
-            var item = document.createElement("li");
-            item.className = "todo-item" + (todos[index].done ? " done" : "");
-
-            var label = document.createElement("label");
-            var checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.checked = todos[index].done;
-
-            checkbox.addEventListener("change", function () {
-                todos[index].done = checkbox.checked;
-                saveTodos();
-                renderTodos();
-            });
-
-            var text = document.createElement("span");
-            text.textContent = todos[index].text;
-
-            label.appendChild(checkbox);
-            label.appendChild(text);
-
-            var deleteButton = document.createElement("button");
-            deleteButton.className = "delete";
-            deleteButton.type = "button";
-            deleteButton.textContent = "×";
-
-            deleteButton.addEventListener("click", function () {
-                todos.splice(index, 1);
-                saveTodos();
-                renderTodos();
-            });
-
-            item.appendChild(label);
-            item.appendChild(deleteButton);
-            list.appendChild(item);
-        })(i);
-    }
-}
-
-document.getElementById("todo-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var input = document.getElementById("todo-input");
-    var text = input.value.trim();
-    if (!text) { return; }
-
-    todos.push({ text: text, done: false });
-    saveTodos();
-    renderTodos();
-    input.value = "";
-});
-
-loadTodos();
-
-/* ==========================================================================
-   5. CALENDARIO Y NOTAS POR DÍA
+   4. TAREAS Y NOTAS (CALENDARIO Y DASHBOARD)
    ========================================================================== */
 var CAL_TASKS_KEY = "desk-calendar-day-tasks-v1";
 var calendarTasks = {}; // Formato: { "YYYY-MM-DD": [ { text: "...", done: false } ] }
 
-var calCurrentYear;
-var calCurrentMonth;
-var selectedDateStr = null;
+function formatDateISO(date) {
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
+}
+
+function migrateLegacyTodos() {
+    try {
+        var legacy = localStorage.getItem("desk-dashboard-todos-v2");
+        if (legacy) {
+            var parsed = JSON.parse(legacy);
+            if (parsed && parsed.length > 0) {
+                var todayKey = formatDateISO(new Date());
+                if (!calendarTasks[todayKey]) {
+                    calendarTasks[todayKey] = [];
+                }
+                for (var i = 0; i < parsed.length; i++) {
+                    calendarTasks[todayKey].push(parsed[i]);
+                }
+                saveCalendarTasks();
+            }
+            localStorage.removeItem("desk-dashboard-todos-v2");
+        }
+    } catch (e) {}
+}
 
 function loadCalendarTasks() {
     try {
@@ -248,6 +183,7 @@ function loadCalendarTasks() {
     } catch (e) {
         calendarTasks = {};
     }
+    migrateLegacyTodos();
 }
 
 function saveCalendarTasks() {
@@ -255,6 +191,56 @@ function saveCalendarTasks() {
         localStorage.setItem(CAL_TASKS_KEY, JSON.stringify(calendarTasks));
     } catch (e) {}
 }
+
+function renderDashboardTodayTasks() {
+    var list = document.getElementById("dashboard-today-list");
+    var empty = document.getElementById("dashboard-today-empty");
+    var countEl = document.getElementById("dashboard-today-count");
+    if (!list) { return; }
+
+    list.innerHTML = "";
+
+    var todayStr = formatDateISO(new Date());
+    var todayList = (calendarTasks && calendarTasks[todayStr]) ? calendarTasks[todayStr] : [];
+
+    if (countEl) {
+        countEl.textContent = todayList.length + (todayList.length === 1 ? " tarea" : " tareas");
+    }
+
+    if (todayList.length === 0) {
+        if (empty) { empty.style.display = "block"; }
+        return;
+    }
+
+    if (empty) { empty.style.display = "none"; }
+
+    for (var i = 0; i < todayList.length; i++) {
+        var item = document.createElement("li");
+        item.className = "dashboard-today-item" + (todayList[i].done ? " done" : "");
+
+        var bullet = document.createElement("span");
+        bullet.className = "dashboard-today-bullet";
+        bullet.textContent = todayList[i].done ? "✓" : "•";
+
+        var text = document.createElement("span");
+        text.className = "dashboard-today-text";
+        text.textContent = todayList[i].text;
+
+        item.appendChild(bullet);
+        item.appendChild(text);
+        list.appendChild(item);
+    }
+}
+
+loadCalendarTasks();
+renderDashboardTodayTasks();
+
+/* ==========================================================================
+   5. CALENDARIO Y NOTAS POR DÍA
+   ========================================================================== */
+var calCurrentYear;
+var calCurrentMonth;
+var selectedDateStr = null;
 
 function getStartAndEndOfWeek(date) {
     var d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -268,13 +254,6 @@ function getStartAndEndOfWeek(date) {
     sunday.setHours(23, 59, 59, 999);
 
     return { start: monday, end: sunday };
-}
-
-function formatDateISO(date) {
-    var y = date.getFullYear();
-    var m = date.getMonth() + 1;
-    var d = date.getDate();
-    return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
 }
 
 function renderCalendar() {
@@ -321,6 +300,8 @@ function renderCalendar() {
     renderSelectedDayPanel();
     // Renderizar resumen global de tareas (solo lectura)
     renderCalendarSummary();
+    // Renderizar tareas de hoy en dashboard (solo lectura)
+    renderDashboardTodayTasks();
 }
 
 function createCalCell(dateObj, isOtherMonth, todayStr, weekRange) {
@@ -417,6 +398,7 @@ function renderSelectedDayPanel() {
                 saveCalendarTasks();
                 renderSelectedDayPanel();
                 renderCalendarSummary();
+                renderDashboardTodayTasks();
             });
 
             var text = document.createElement("span");
@@ -632,6 +614,7 @@ toggleBtn.addEventListener("click", function () {
         viewDashboard.className = "dashboard-view active";
         toggleText.textContent = "Ver Calendario";
         // toggleIcon.textContent = "📅";
+        renderDashboardTodayTasks();
     }
 });
 

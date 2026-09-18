@@ -189,6 +189,68 @@ body {
     margin: 0 auto;
 }
 
+.today-tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.today-tasks-header .section-title {
+    margin-bottom: 0;
+}
+
+.today-tasks-count {
+    font-size: 13px;
+    color: #596667;
+}
+
+.dashboard-today-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-today-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background-color: #080c0d;
+    border: 1px solid #101718;
+    color: #929e9f;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.dashboard-today-bullet {
+    color: #4f8084;
+    font-size: 15px;
+    line-height: 1.4;
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+.dashboard-today-text {
+    flex: 1;
+    word-break: break-word;
+}
+
+.dashboard-today-item.done {
+    color: #3d4849;
+    border-color: #0c1213;
+    background-color: transparent;
+}
+
+.dashboard-today-item.done .dashboard-today-bullet {
+    color: #3d4849;
+}
+
+.dashboard-today-item.done .dashboard-today-text {
+    text-decoration: line-through;
+}
+
 .section-title {
     margin-bottom: 12px;
     color: #849091;
@@ -1001,5 +1063,30 @@ body.light-theme {
 }
 
 .light-theme .cal-summary-task-item.done .cal-summary-bullet {
+    color: #9aa8a9;
+}
+
+/* Tareas de hoy en Dashboard (Modo Claro) */
+.light-theme .today-tasks-count {
+    color: #728486;
+}
+
+.light-theme .dashboard-today-item {
+    background-color: #ffffff;
+    border-color: #e5ecec;
+    color: #394749;
+}
+
+.light-theme .dashboard-today-bullet {
+    color: #4a7477;
+}
+
+.light-theme .dashboard-today-item.done {
+    background-color: transparent;
+    border-color: transparent;
+    color: #9aa8a9;
+}
+
+.light-theme .dashboard-today-item.done .dashboard-today-bullet {
     color: #9aa8a9;
 }

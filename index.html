@@ -74,15 +74,14 @@
                 </div>
             </section>
 
-            <!-- Tareas Rápidas de Hoy -->
+            <!-- Resumen de Tareas de Hoy (Solo lectura) -->
             <section class="todo">
-                <div class="section-title">Hoy</div>
-                <form id="todo-form" class="todo-form">
-                    <input id="todo-input" type="text" maxlength="100" placeholder="Agregar una tarea..." autocomplete="off">
-                    <button type="submit" aria-label="Agregar tarea">+</button>
-                </form>
-                <ul id="todo-list"></ul>
-                <div id="todo-empty" class="todo-empty">No hay tareas pendientes.</div>
+                <div class="today-tasks-header">
+                    <div class="section-title">Tareas de Hoy</div>
+                    <span id="dashboard-today-count" class="today-tasks-count">0 tareas</span>
+                </div>
+                <ul id="dashboard-today-list" class="dashboard-today-list"></ul>
+                <div id="dashboard-today-empty" class="todo-empty">No hay tareas programadas para hoy.</div>
             </section>
 
             <!-- Footer -->
