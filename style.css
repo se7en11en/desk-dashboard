@@ -30,6 +30,12 @@ body {
     top: 14px;
     right: 16px;
     z-index: 50;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
 }
 
 .btn-toggle {
@@ -49,6 +55,37 @@ body {
 .btn-toggle:active {
     background-color: #152224;
     color: #cbd3d3;
+}
+
+.btn-theme-toggle {
+    padding: 10px 12px;
+    min-width: 40px;
+    min-height: 40px;
+    justify-content: center;
+    margin-right: 8px;
+}
+
+.theme-svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+}
+
+.theme-icon-sun {
+    display: block;
+}
+
+.theme-icon-moon {
+    display: none;
+}
+
+.light-theme .theme-icon-sun {
+    display: none;
+}
+
+.light-theme .theme-icon-moon {
+    display: block;
 }
 
 /*
@@ -289,7 +326,7 @@ footer button {
     gap: 16px;
     padding-bottom: 16px;
     border-bottom: 1px solid #11191a;
-    padding-right: 170px; /* Evita solaparse con el botón toggle */
+    padding-right: 220px; /* Evita solaparse con los botones toggle */
 }
 
 .cal-mini-clock {
@@ -529,7 +566,7 @@ footer button {
 
     .cal-header {
         padding-right: 0;
-        margin-top: 36px;
+        margin-top: 48px;
     }
 
     .clock {
@@ -540,4 +577,221 @@ footer button {
     .cal-day-cell {
         min-height: 54px;
     }
+}
+
+/*
+    ======================================
+    MODO CLARO (LIGHT THEME)
+    Compatible con Android 7 y navegadores antiguos vía clases CSS.
+    ======================================
+*/
+html.light-theme,
+body.light-theme {
+    background-color: #f3f5f6;
+    color: #232d2e;
+}
+
+.light-theme .btn-toggle {
+    background-color: #ffffff;
+    border-color: #d6dedf;
+    color: #556769;
+}
+
+.light-theme .btn-toggle:active {
+    background-color: #e5ecec;
+    color: #1a2425;
+}
+
+.light-theme .date {
+    color: #637779;
+}
+
+.light-theme .clock {
+    color: #1e2829;
+}
+
+.light-theme .seconds {
+    color: #8c9ea0;
+}
+
+.light-theme .weather {
+    border-top-color: #dbe2e3;
+    border-bottom-color: #dbe2e3;
+}
+
+.light-theme .temperature {
+    color: #2b393b;
+}
+
+.light-theme .condition {
+    color: #5d7072;
+}
+
+.light-theme .weather-info {
+    color: #728486;
+}
+
+.light-theme .section-title {
+    color: #546768;
+}
+
+.light-theme .todo-form input,
+.light-theme .day-task-form input {
+    border-color: #d6dedf;
+    background: #ffffff;
+    color: #232d2e;
+}
+
+.light-theme .todo-form input:focus,
+.light-theme .day-task-form input:focus {
+    border-color: #4a7477;
+}
+
+.light-theme .todo-form button,
+.light-theme .day-task-form button {
+    border-color: #d6dedf;
+    background: #eef2f3;
+    color: #4f6365;
+}
+
+.light-theme .todo-form button:active,
+.light-theme .day-task-form button:active {
+    background: #e2e8e9;
+    color: #1a2425;
+}
+
+.light-theme .todo-item {
+    border-bottom-color: #e5ecec;
+}
+
+.light-theme .todo-item input {
+    accent-color: #456d70;
+}
+
+.light-theme .todo-item span {
+    color: #394749;
+}
+
+.light-theme .todo-item.done span {
+    color: #9aa8a9;
+}
+
+.light-theme .delete {
+    color: #93a2a4;
+}
+
+.light-theme .delete:hover,
+.light-theme .delete:active {
+    color: #c44d4d;
+}
+
+.light-theme .todo-empty,
+.light-theme .day-task-empty {
+    color: #829496;
+}
+
+.light-theme footer {
+    color: #7b8d8f;
+}
+
+.light-theme footer button {
+    color: #576b6d;
+}
+
+/* Calendario en Modo Claro */
+.light-theme .cal-header {
+    border-bottom-color: #dbe2e3;
+}
+
+.light-theme #cal-clock-time {
+    color: #2b393b;
+}
+
+.light-theme .cal-mini-date {
+    color: #637779;
+}
+
+.light-theme .month-label {
+    color: #1e2829;
+}
+
+.light-theme .nav-btn {
+    background: #ffffff;
+    border-color: #d6dedf;
+    color: #4f6365;
+}
+
+.light-theme .nav-btn:active {
+    background: #e2e8e9;
+    color: #1a2425;
+}
+
+.light-theme .cal-grid-wrapper {
+    background-color: #ffffff;
+    border-color: #dbe2e3;
+}
+
+.light-theme .cal-weekdays {
+    border-bottom-color: #e5ecec;
+}
+
+.light-theme .cal-weekdays div {
+    color: #728486;
+}
+
+.light-theme .cal-day-btn {
+    background: #f8fafb;
+    border-color: #e5ecec;
+    color: #4d5f61;
+}
+
+.light-theme .cal-day-btn:active {
+    background: #e9eff0;
+}
+
+.light-theme .cal-day-cell.other-month .cal-day-btn {
+    opacity: 0.25;
+    background: transparent;
+    border-color: transparent;
+}
+
+.light-theme .cal-day-cell.current-week .cal-day-btn {
+    background-color: #edf3f4;
+    border-color: #d1dcdd;
+}
+
+.light-theme .cal-day-cell.today .cal-day-btn {
+    border-color: #4a7477;
+    color: #162122;
+}
+
+.light-theme .cal-day-cell.today .cal-day-btn::before {
+    background-color: #4a7477;
+}
+
+.light-theme .cal-day-cell.selected .cal-day-btn {
+    background-color: #dce7e8;
+    border-color: #5a878a;
+    color: #0f191a;
+}
+
+.light-theme .day-task-badge {
+    background-color: #4a7477;
+}
+
+.light-theme .cal-day-panel {
+    background-color: #ffffff;
+    border-color: #dbe2e3;
+}
+
+.light-theme .day-panel-header {
+    border-bottom-color: #e5ecec;
+}
+
+.light-theme .day-title {
+    color: #2b393b;
+}
+
+.light-theme .day-subtitle {
+    color: #728486;
 }

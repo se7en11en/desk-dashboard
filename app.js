@@ -556,3 +556,82 @@ function updateScreensaver() {
 
 updateScreensaver();
 setInterval(updateScreensaver, 1000);
+
+/* ==========================================================================
+   8. MODO OSCURO / MODO CLARO (THEME TOGGLE)
+   Compatible con Android 7 y navegadores antiguos.
+   ========================================================================== */
+var THEME_KEY = "desk-dashboard-theme-v1";
+var currentTheme = "dark";
+var themeToggleBtn = document.getElementById("toggle-theme-btn");
+var metaThemeColor = document.getElementById("meta-theme-color");
+var metaColorScheme = document.getElementById("meta-color-scheme");
+
+function applyTheme(theme) {
+    currentTheme = theme;
+    var htmlEl = document.documentElement;
+    var bodyEl = document.body;
+
+    if (theme === "light") {
+        if (htmlEl.classList) {
+            htmlEl.classList.add("light-theme");
+            if (bodyEl) { bodyEl.classList.add("light-theme"); }
+        } else {
+            if (htmlEl.className.indexOf("light-theme") === -1) {
+                htmlEl.className = (htmlEl.className + " light-theme").trim();
+            }
+            if (bodyEl && bodyEl.className.indexOf("light-theme") === -1) {
+                bodyEl.className = (bodyEl.className + " light-theme").trim();
+            }
+        }
+
+        if (metaThemeColor) { metaThemeColor.setAttribute("content", "#f3f5f6"); }
+        if (metaColorScheme) { metaColorScheme.setAttribute("content", "light"); }
+        if (themeToggleBtn) {
+            themeToggleBtn.setAttribute("aria-label", "Cambiar a modo oscuro");
+            themeToggleBtn.setAttribute("title", "Cambiar a modo oscuro");
+        }
+    } else {
+        if (htmlEl.classList) {
+            htmlEl.classList.remove("light-theme");
+            if (bodyEl) { bodyEl.classList.remove("light-theme"); }
+        } else {
+            htmlEl.className = htmlEl.className.replace(/\blight-theme\b/g, "").replace(/\s+/g, " ").trim();
+            if (bodyEl) {
+                bodyEl.className = bodyEl.className.replace(/\blight-theme\b/g, "").replace(/\s+/g, " ").trim();
+            }
+        }
+
+        if (metaThemeColor) { metaThemeColor.setAttribute("content", "#050707"); }
+        if (metaColorScheme) { metaColorScheme.setAttribute("content", "dark"); }
+        if (themeToggleBtn) {
+            themeToggleBtn.setAttribute("aria-label", "Cambiar a modo claro");
+            themeToggleBtn.setAttribute("title", "Cambiar a modo claro");
+        }
+    }
+}
+
+function initTheme() {
+    var savedTheme = null;
+    try {
+        savedTheme = localStorage.getItem(THEME_KEY);
+    } catch (e) {}
+
+    if (savedTheme === "light") {
+        applyTheme("light");
+    } else {
+        applyTheme("dark");
+    }
+}
+
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", function () {
+        var nextTheme = (currentTheme === "dark") ? "light" : "dark";
+        applyTheme(nextTheme);
+        try {
+            localStorage.setItem(THEME_KEY, nextTheme);
+        } catch (e) {}
+    });
+}
+
+initTheme();
